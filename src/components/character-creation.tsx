@@ -2,11 +2,9 @@
 
 import { useEffect } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
-import type { Config } from 'unique-names-generator'
-import { names, uniqueNamesGenerator } from 'unique-names-generator'
 import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
-import { randomInt } from '~/lib/utils'
+import { randomInt, randomName } from '~/lib/utils'
 
 import { Button } from './ui/button'
 import {
@@ -20,13 +18,6 @@ import {
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 
-const customConfig: Config = {
-  dictionaries: [names, names],
-  separator: ' ',
-  length: 2,
-  style: 'capital',
-}
-
 export function CharacterCreation() {
   const [name, setName] = useLocalStorage('name', '')
   const [avatarSeed, setAvatarSeed] = useLocalStorage('avatar-seed', '')
@@ -34,7 +25,7 @@ export function CharacterCreation() {
 
   /* Fix hydration issue caused by RandomAvatar */
   useEffect(() => {
-    setName(uniqueNamesGenerator(customConfig))
+    setName(randomName())
     setAvatarSeed(randomInt(1, 100_000).toString())
   }, [setName, setAvatarSeed])
 
@@ -74,7 +65,7 @@ export function CharacterCreation() {
           className='flex flex-1'
           variant='secondary'
           onClick={() => {
-            setName(uniqueNamesGenerator(customConfig))
+            setName(randomName())
             setAvatarSeed(randomInt(1, 100_000).toString())
           }}
         >
