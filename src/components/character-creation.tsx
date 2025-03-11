@@ -1,9 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import type { Config } from 'unique-names-generator'
 import { names, uniqueNamesGenerator } from 'unique-names-generator'
+import { useIsMounted, useLocalStorage } from 'usehooks-ts'
+
+import { randomInt } from '~/lib/utils'
 
 import { Button } from './ui/button'
 import {
@@ -25,18 +28,17 @@ const customConfig: Config = {
 }
 
 export function CharacterCreation() {
-  const [mounted, setMounted] = useState(false)
-  const [name, setName] = useState('')
-  const [seed, setSeed] = useState('')
+  const [name, setName] = useLocalStorage('name', '')
+  const [avatarSeed, setAvatarSeed] = useLocalStorage('avatar-seed', '')
+  const isMounted = useIsMounted()()
 
   /* Fix hydration issue caused by RandomAvatar */
   useEffect(() => {
-    setMounted(true)
     setName(uniqueNamesGenerator(customConfig))
-    setSeed(Math.random().toString())
-  }, [])
+    setAvatarSeed(randomInt(1, 100_000).toString())
+  }, [setName, setAvatarSeed])
 
-  if (!mounted) {
+  if (!isMounted) {
     return null
   }
 
@@ -48,7 +50,7 @@ export function CharacterCreation() {
       </CardHeader>
       <CardContent>
         <div className='relative mb-4 flex items-center justify-center'>
-          <RandomAvatar seed={seed} size={15} />
+          <RandomAvatar seed={avatarSeed} size={15} />
         </div>
         <form>
           <div className='grid w-full items-center gap-4'>
@@ -73,7 +75,7 @@ export function CharacterCreation() {
           variant='secondary'
           onClick={() => {
             setName(uniqueNamesGenerator(customConfig))
-            setSeed(Math.random().toString())
+            setAvatarSeed(randomInt(1, 100_000).toString())
           }}
         >
           🎲 Reroll

@@ -19,7 +19,8 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-random-avatar": "1.0.3",
-    "unique-names-generator": "4.7.1"
+    "unique-names-generator": "4.7.1",
+    "usehooks-ts": "3.1.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.0",
