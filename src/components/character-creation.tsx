@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import type { Config } from 'unique-names-generator'
 import { names, uniqueNamesGenerator } from 'unique-names-generator'
@@ -25,8 +25,20 @@ const customConfig: Config = {
 }
 
 export function CharacterCreation() {
-  const [name, setName] = useState(uniqueNamesGenerator(customConfig))
-  const [seed, setSeed] = useState(Math.random().toString())
+  const [mounted, setMounted] = useState(false)
+  const [name, setName] = useState('')
+  const [seed, setSeed] = useState('')
+
+  /* Fix hydration issue caused by RandomAvatar */
+  useEffect(() => {
+    setMounted(true)
+    setName(uniqueNamesGenerator(customConfig))
+    setSeed(Math.random().toString())
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <Card className='mx-auto w-full max-w-md'>
