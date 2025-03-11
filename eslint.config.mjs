@@ -15,7 +15,7 @@ const compat = new FlatCompat({
 })
 
 const nextConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.extends('next/core-web-vitals'),
   {
     rules: {
       'react/jsx-boolean-value': ['error', 'always'],
