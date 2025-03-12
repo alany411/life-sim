@@ -90,6 +90,7 @@ export function CharacterCreation() {
               <div className='flex flex-col space-y-1.5'>
                 <Label htmlFor='name'>Name</Label>
                 <Input
+                  autoComplete='off'
                   id='name'
                   placeholder=''
                   type='text'
