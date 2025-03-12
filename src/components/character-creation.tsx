@@ -8,7 +8,7 @@ import { useIsMounted } from 'usehooks-ts'
 
 import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useGame } from '~/hooks/use-game'
-import { capitalize } from '~/lib/utils'
+import { capitalize, randomInt } from '~/lib/utils'
 
 import { Button } from './ui/button'
 import {
@@ -34,6 +34,14 @@ import {
 } from './ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
+const statEmojis = {
+  agility: '🏃',
+  charisma: '✨',
+  intelligence: '🧠',
+  strength: '💪',
+  wisdom: '🔮',
+}
+
 export function CharacterCreation() {
   const { info, stats, updateCharacterStats } = useCharacterStats()
   const { initialized, resetGame, updateGame } = useGame()
@@ -55,14 +63,6 @@ export function CharacterCreation() {
     window.alert(
       `Congratulations! You were born on ${format(info.birthday, 'MMMM d')}. Your parents have named you ${info.name}.`
     )
-  }
-
-  const statEmojis = {
-    agility: '🏃',
-    charisma: '✨',
-    intelligence: '🧠',
-    strength: '💪',
-    wisdom: '🔮',
   }
 
   return (
@@ -115,6 +115,17 @@ export function CharacterCreation() {
                 />
               </div>
             </div>
+            <div className='flex'>
+              <Button
+                className='flex flex-1'
+                variant='secondary'
+                onClick={() => {
+                  resetGame()
+                }}
+              >
+                🎲 Reroll Info
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent className='mt-4 space-y-4' value='stat-points'>
@@ -122,7 +133,7 @@ export function CharacterCreation() {
               <TableCaption>
                 You start a life with between{' '}
                 <span className='text-foreground font-medium'>0</span> and{' '}
-                <span className='text-foreground font-medium'>25</span> stat
+                <span className='text-foreground font-medium'>15</span> stat
                 points.
               </TableCaption>
               <TableHeader>
@@ -155,19 +166,25 @@ export function CharacterCreation() {
                 </TableRow>
               </TableFooter>
             </Table>
+            <div className='flex'>
+              <Button
+                className='flex flex-1'
+                variant='secondary'
+                onClick={() => {
+                  ;(Object.entries(stats) as Entries<typeof stats>).forEach(
+                    ([stat]) => {
+                      updateCharacterStats(stat, randomInt(0, 3))
+                    }
+                  )
+                }}
+              >
+                🎲 Reroll Stat Points
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </CardContent>
       <CardFooter className='flex gap-4'>
-        <Button
-          className='flex flex-1'
-          variant='secondary'
-          onClick={() => {
-            resetGame()
-          }}
-        >
-          🎲 Reroll
-        </Button>
         <Button className='flex flex-1' onClick={startLife}>
           Start Life
         </Button>

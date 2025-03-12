@@ -32,7 +32,7 @@ function DatePicker({
     <Popover>
       <PopoverTrigger asChild={true}>
         <Button
-          className='text-muted-foreground justify-start text-left font-normal'
+          className='text-muted-foreground flex-1 justify-start text-left font-normal'
           variant={'outline'}
         >
           <CalendarIcon className='mr-2 h-4 w-4' />
