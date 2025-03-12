@@ -24,17 +24,5 @@ export function randomDate() {
   const date = new Date(Math.floor(Math.random() * Date.now()))
   date.setUTCHours(12, 0, 0, 0)
 
-  const month = date.toLocaleString('default', {
-    month: 'long',
-    timeZone: 'UTC',
-  })
-  const day = date.toLocaleString('default', {
-    day: 'numeric',
-    timeZone: 'UTC',
-  })
-
-  return {
-    label: `${month} ${day}`,
-    value: date,
-  }
+  return date
 }

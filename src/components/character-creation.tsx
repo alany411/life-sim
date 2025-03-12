@@ -1,5 +1,6 @@
 'use client'
 
+import { format } from 'date-fns'
 import { useEffect } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import { useIsMounted } from 'usehooks-ts'
@@ -16,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card'
+import { DatePicker } from './ui/date-picker'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 
@@ -37,7 +39,7 @@ export function CharacterCreation() {
 
   const startLife = () => {
     window.alert(
-      `Congratulations! You were just born. Your parents have named you ${name}.`
+      `Congratulations! You were born on ${format(birthday, 'MMMM d')}. Your parents have named you ${name}.`
     )
   }
 
@@ -67,12 +69,12 @@ export function CharacterCreation() {
             </div>
             <div className='flex flex-col space-y-1.5'>
               <Label htmlFor='birthday'>Birthday</Label>
-              <Input
-                disabled={true}
+              <DatePicker
                 id='birthday'
-                placeholder=''
-                type='text'
-                value={birthday.label}
+                selected={birthday}
+                onSelect={(date) => {
+                  updateCharacterStats('birthday', date)
+                }}
               />
             </div>
           </div>

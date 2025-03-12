@@ -8,10 +8,7 @@ export function useCharacterStats() {
     {
       avatar: '',
       name: '',
-      birthday: {
-        label: '',
-        value: new Date(),
-      },
+      birthday: new Date(),
       age: 0,
       gender: '',
       profession: '',
@@ -24,15 +21,10 @@ export function useCharacterStats() {
   )
 
   const resetCharacterStats = () => {
-    const { label, value } = randomDate()
-
     setCharacterStats({
       avatar: randomInt(1, 100_000).toString(),
       name: randomName(),
-      birthday: {
-        label,
-        value,
-      },
+      birthday: randomDate(),
       age: 0,
       gender: '',
       profession: '',
