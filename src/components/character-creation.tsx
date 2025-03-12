@@ -2,10 +2,10 @@
 
 import { useEffect } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
-import { useIsMounted, useLocalStorage } from 'usehooks-ts'
+import { useIsMounted } from 'usehooks-ts'
 
-import { useCharacterStats } from '~/lib/utils'
-import { randomFloat, randomInt, randomName } from '~/lib/utils'
+import { useCharacterStats } from '~/hooks/use-character-stats'
+import { useGame } from '~/hooks/use-game'
 
 import { Button } from './ui/button'
 import {
@@ -20,18 +20,17 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 
 export function CharacterCreation() {
-  const { name, setName, height, setHeight, weight, setWeight } =
+  const { avatar, name, height, weight, updateCharacterStats } =
     useCharacterStats()
-  const [avatarSeed, setAvatarSeed] = useLocalStorage('avatar-seed', '')
+  const { initialized, resetGame, updateGame } = useGame()
   const isMounted = useIsMounted()()
 
-  /* Fix hydration issue caused by RandomAvatar */
   useEffect(() => {
-    setName(randomName())
-    setAvatarSeed(randomInt(1, 100_000).toString())
-    setHeight(randomFloat(45, 60)) // cm
-    setWeight(randomFloat(2.5, 4)) // kg
-  }, [setName, setAvatarSeed, setHeight, setWeight])
+    if (!initialized) {
+      resetGame()
+      updateGame('initialized', true)
+    }
+  }, [initialized, resetGame, updateGame])
 
   if (!isMounted) {
     return null
@@ -51,7 +50,7 @@ export function CharacterCreation() {
       </CardHeader>
       <CardContent>
         <div className='relative mb-4 flex items-center justify-center'>
-          <RandomAvatar seed={avatarSeed} size={15} />
+          <RandomAvatar seed={avatar} size={15} />
         </div>
         <form>
           <div className='grid w-full items-center gap-4'>
@@ -63,7 +62,7 @@ export function CharacterCreation() {
                 type='text'
                 value={name}
                 onChange={(e) => {
-                  setName(e.target.value)
+                  updateCharacterStats('name', e.target.value)
                 }}
               />
             </div>
@@ -75,10 +74,7 @@ export function CharacterCreation() {
           className='flex flex-1'
           variant='secondary'
           onClick={() => {
-            setName(randomName())
-            setAvatarSeed(randomInt(1, 100_000).toString())
-            setHeight(randomFloat(45, 60)) // cm
-            setWeight(randomFloat(2.5, 4)) // kg
+            resetGame()
           }}
         >
           🎲 Reroll
