@@ -1,10 +1,9 @@
 'use client'
 
 import { format } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import type { Entries } from 'type-fest'
-import { useIsMounted } from 'usehooks-ts'
 
 import { useCharacterInfo } from '~/hooks/use-character-info'
 import { useCharacterStats } from '~/hooks/use-character-stats'
@@ -47,26 +46,8 @@ export function CharacterCreation() {
   const { characterInfo, resetCharacterInfo, updateCharacterInfo } =
     useCharacterInfo()
   const { characterStats, resetCharacterStats } = useCharacterStats()
-  const { game, resetGame, updateGame } = useGame()
-  const isMounted = useIsMounted()()
+  const { updateGame } = useGame()
   const [activeTab, setActiveTab] = useState('basic-info')
-
-  useEffect(() => {
-    if (!game.initialized) {
-      resetGame()
-      updateGame('initialized', true)
-    }
-  }, [game.initialized, resetGame, updateGame])
-
-  if (!isMounted) {
-    return null
-  }
-
-  const startLife = () => {
-    window.alert(
-      `Congratulations! You were born on ${format(characterInfo.birthday, 'MMMM d')}. Your parents have named you ${characterInfo.name}.`
-    )
-  }
 
   return (
     <Card className='mx-auto w-full max-w-md'>
@@ -187,7 +168,12 @@ export function CharacterCreation() {
         </Tabs>
       </CardContent>
       <CardFooter className='flex gap-4'>
-        <Button className='flex flex-1' onClick={startLife}>
+        <Button
+          className='flex flex-1'
+          onClick={() => {
+            updateGame('started', true)
+          }}
+        >
           Start Life
         </Button>
       </CardFooter>
