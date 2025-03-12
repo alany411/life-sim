@@ -20,8 +20,7 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 
 export function CharacterCreation() {
-  const { avatar, name, height, weight, updateCharacterStats } =
-    useCharacterStats()
+  const { avatar, name, updateCharacterStats } = useCharacterStats()
   const { initialized, resetGame, updateGame } = useGame()
   const isMounted = useIsMounted()()
 
@@ -38,7 +37,7 @@ export function CharacterCreation() {
 
   const startLife = () => {
     window.alert(
-      `Congratulations! You were just born. Your parents have named you ${name} and you are ${height.toString()}cm tall and weight ${weight.toString()}kg.`
+      `Congratulations! You were just born. Your parents have named you ${name}.`
     )
   }
 

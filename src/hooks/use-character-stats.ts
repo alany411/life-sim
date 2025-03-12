@@ -1,6 +1,6 @@
 import { useLocalStorage } from 'usehooks-ts'
 
-import { randomFloat, randomInt, randomName } from '~/lib/utils'
+import { randomInt, randomName } from '~/lib/utils'
 
 export function useCharacterStats() {
   const [characterStats, setCharacterStats] = useLocalStorage(
@@ -10,8 +10,6 @@ export function useCharacterStats() {
       name: '',
       age: 0,
       gender: '',
-      height: 0,
-      weight: 0,
       profession: '',
       agility: 0,
       charisma: 0,
@@ -27,8 +25,6 @@ export function useCharacterStats() {
       name: randomName(),
       age: 0,
       gender: '',
-      height: randomFloat(45, 60),
-      weight: randomFloat(2.5, 4),
       profession: '',
       agility: 0,
       charisma: 0,
