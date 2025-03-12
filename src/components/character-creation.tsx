@@ -5,7 +5,7 @@ import { RandomAvatar } from 'react-random-avatar'
 import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
 import { useCharacterStats } from '~/lib/utils'
-import { randomInt, randomName } from '~/lib/utils'
+import { randomFloat, randomInt, randomName } from '~/lib/utils'
 
 import { Button } from './ui/button'
 import {
@@ -29,8 +29,8 @@ export function CharacterCreation() {
   useEffect(() => {
     setName(randomName())
     setAvatarSeed(randomInt(1, 100_000).toString())
-    setHeight(randomInt(45, 60)) // cm
-    setWeight(randomInt(2.5, 4)) // kg
+    setHeight(randomFloat(45, 60)) // cm
+    setWeight(randomFloat(2.5, 4)) // kg
   }, [setName, setAvatarSeed, setHeight, setWeight])
 
   if (!isMounted) {
@@ -78,6 +78,8 @@ export function CharacterCreation() {
           onClick={() => {
             setName(randomName())
             setAvatarSeed(randomInt(1, 100_000).toString())
+            setHeight(randomFloat(45, 60)) // cm
+            setWeight(randomFloat(2.5, 4)) // kg
           }}
         >
           🎲 Reroll
