@@ -6,9 +6,10 @@ import { RandomAvatar } from 'react-random-avatar'
 import type { Entries } from 'type-fest'
 import { useIsMounted } from 'usehooks-ts'
 
+import { useCharacterInfo } from '~/hooks/use-character-info'
 import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useGame } from '~/hooks/use-game'
-import { capitalize, randomInt } from '~/lib/utils'
+import { capitalize } from '~/lib/utils'
 
 import { Button } from './ui/button'
 import {
@@ -43,17 +44,19 @@ const statEmojis = {
 }
 
 export function CharacterCreation() {
-  const { info, stats, updateCharacterStats } = useCharacterStats()
-  const { initialized, resetGame, updateGame } = useGame()
+  const { characterInfo, resetCharacterInfo, updateCharacterInfo } =
+    useCharacterInfo()
+  const { characterStats, resetCharacterStats } = useCharacterStats()
+  const { game, resetGame, updateGame } = useGame()
   const isMounted = useIsMounted()()
   const [activeTab, setActiveTab] = useState('basic-info')
 
   useEffect(() => {
-    if (!initialized) {
+    if (!game.initialized) {
       resetGame()
       updateGame('initialized', true)
     }
-  }, [initialized, resetGame, updateGame])
+  }, [game.initialized, resetGame, updateGame])
 
   if (!isMounted) {
     return null
@@ -61,7 +64,7 @@ export function CharacterCreation() {
 
   const startLife = () => {
     window.alert(
-      `Congratulations! You were born on ${format(info.birthday, 'MMMM d')}. Your parents have named you ${info.name}.`
+      `Congratulations! You were born on ${format(characterInfo.birthday, 'MMMM d')}. Your parents have named you ${characterInfo.name}.`
     )
   }
 
@@ -84,7 +87,7 @@ export function CharacterCreation() {
 
           <TabsContent className='mt-4 space-y-4' value='basic-info'>
             <div className='relative flex items-center justify-center'>
-              <RandomAvatar seed={info.avatar} size={15} />
+              <RandomAvatar seed={characterInfo.avatar} size={15} />
             </div>
             <div className='grid w-full items-center gap-4'>
               <div className='flex flex-col space-y-1.5'>
@@ -94,9 +97,9 @@ export function CharacterCreation() {
                   id='name'
                   placeholder=''
                   type='text'
-                  value={info.name}
+                  value={characterInfo.name}
                   onChange={(e) => {
-                    updateCharacterStats('name', e.target.value)
+                    updateCharacterInfo('name', e.target.value)
                   }}
                 />
               </div>
@@ -104,14 +107,14 @@ export function CharacterCreation() {
                 <Label htmlFor='birthday'>Birthday</Label>
                 <DatePicker
                   id='birthday'
-                  selected={info.birthday}
+                  selected={characterInfo.birthday}
                   calendarProps={{
                     formatters: {
                       formatCaption: (date) => format(date, 'MMMM'),
                     },
                   }}
                   onSelect={(date) => {
-                    updateCharacterStats('birthday', date)
+                    updateCharacterInfo('birthday', date)
                   }}
                 />
               </div>
@@ -121,7 +124,7 @@ export function CharacterCreation() {
                 className='flex flex-1'
                 variant='secondary'
                 onClick={() => {
-                  resetGame()
+                  resetCharacterInfo()
                 }}
               >
                 🎲 Reroll Info
@@ -144,22 +147,24 @@ export function CharacterCreation() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {(Object.entries(stats) as Entries<typeof stats>).map(
-                  ([stat, value]) => (
-                    <TableRow key={stat}>
-                      <TableCell>
-                        {statEmojis[stat]} {capitalize(stat)}
-                      </TableCell>
-                      <TableCell className='text-right'>{value}</TableCell>
-                    </TableRow>
-                  )
-                )}
+                {(
+                  Object.entries(characterStats) as Entries<
+                    typeof characterStats
+                  >
+                ).map(([stat, value]) => (
+                  <TableRow key={stat}>
+                    <TableCell>
+                      {statEmojis[stat]} {capitalize(stat)}
+                    </TableCell>
+                    <TableCell className='text-right'>{value}</TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
               <TableFooter>
                 <TableRow>
                   <TableCell colSpan={1}>Total</TableCell>
                   <TableCell className='text-right'>
-                    {Object.values(stats).reduce(
+                    {Object.values(characterStats).reduce(
                       (acc, value) => acc + value,
                       0
                     )}
@@ -172,11 +177,7 @@ export function CharacterCreation() {
                 className='flex flex-1'
                 variant='secondary'
                 onClick={() => {
-                  ;(Object.entries(stats) as Entries<typeof stats>).forEach(
-                    ([stat]) => {
-                      updateCharacterStats(stat, randomInt(0, 3))
-                    }
-                  )
+                  resetCharacterStats()
                 }}
               >
                 🎲 Reroll Stat Points

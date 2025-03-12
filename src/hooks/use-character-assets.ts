@@ -33,7 +33,7 @@ export function useCharacterAssets() {
   }
 
   return {
-    ...characterAssets,
+    characterAssets,
     resetCharacterAssets,
     updateCharacterAssets,
   }

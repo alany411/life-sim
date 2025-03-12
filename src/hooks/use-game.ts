@@ -1,6 +1,7 @@
 import { useLocalStorage } from 'usehooks-ts'
 
 import { useCharacterAssets } from './use-character-assets'
+import { useCharacterInfo } from './use-character-info'
 import { useCharacterStats } from './use-character-stats'
 
 export function useGame() {
@@ -8,10 +9,12 @@ export function useGame() {
     initialized: false,
   })
   const { resetCharacterAssets } = useCharacterAssets()
+  const { resetCharacterInfo } = useCharacterInfo()
   const { resetCharacterStats } = useCharacterStats()
 
   const resetGame = () => {
     resetCharacterAssets()
+    resetCharacterInfo()
     resetCharacterStats()
   }
 
@@ -23,7 +26,7 @@ export function useGame() {
   }
 
   return {
-    ...game,
+    game,
     resetGame,
     updateGame,
   }
