@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 
+import { useCharacterStats } from '~/lib/utils'
 import { randomInt, randomName } from '~/lib/utils'
 
 import { Button } from './ui/button'
@@ -19,7 +20,8 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 
 export function CharacterCreation() {
-  const [name, setName] = useLocalStorage('name', '')
+  const { name, setName, height, setHeight, weight, setWeight } =
+    useCharacterStats()
   const [avatarSeed, setAvatarSeed] = useLocalStorage('avatar-seed', '')
   const isMounted = useIsMounted()()
 
@@ -27,14 +29,23 @@ export function CharacterCreation() {
   useEffect(() => {
     setName(randomName())
     setAvatarSeed(randomInt(1, 100_000).toString())
-  }, [setName, setAvatarSeed])
+    setHeight(randomInt(45, 60)) // cm
+    setWeight(randomInt(2.5, 4)) // kg
+  }, [setName, setAvatarSeed, setHeight, setWeight])
 
   if (!isMounted) {
     return null
   }
 
+  const startLife = () => {
+    window.alert(
+      `Congratulations! You were just born. Your parents have named you ${name} and you are ${height.toString()}cm tall and weight ${weight.toString()}kg.`
+    )
+  }
+
   return (
     <Card className='mx-auto w-full max-w-md'>
+      Hi Alan :)
       <CardHeader className='text-center'>
         <CardTitle className='text-3xl'>LifeSim</CardTitle>
         <CardDescription>Create your character</CardDescription>
@@ -71,7 +82,9 @@ export function CharacterCreation() {
         >
           🎲 Reroll
         </Button>
-        <Button className='flex flex-1'>Start Life</Button>
+        <Button className='flex flex-1' onClick={startLife}>
+          Start Life
+        </Button>
       </CardFooter>
     </Card>
   )
