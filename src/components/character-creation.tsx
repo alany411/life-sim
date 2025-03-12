@@ -120,7 +120,10 @@ export function CharacterCreation() {
           <TabsContent className='mt-4 space-y-4' value='stat-points'>
             <Table>
               <TableCaption>
-                You start a life with a total of 15 stat points.
+                You start a life with between{' '}
+                <span className='text-foreground font-medium'>0</span> and{' '}
+                <span className='text-foreground font-medium'>25</span> stat
+                points.
               </TableCaption>
               <TableHeader>
                 <TableRow>
