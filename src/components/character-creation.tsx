@@ -20,7 +20,7 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 
 export function CharacterCreation() {
-  const { avatar, name, updateCharacterStats } = useCharacterStats()
+  const { avatar, name, birthday, updateCharacterStats } = useCharacterStats()
   const { initialized, resetGame, updateGame } = useGame()
   const isMounted = useIsMounted()()
 
@@ -63,6 +63,16 @@ export function CharacterCreation() {
                 onChange={(e) => {
                   updateCharacterStats('name', e.target.value)
                 }}
+              />
+            </div>
+            <div className='flex flex-col space-y-1.5'>
+              <Label htmlFor='birthday'>Birthday</Label>
+              <Input
+                disabled={true}
+                id='birthday'
+                placeholder=''
+                type='text'
+                value={birthday.label}
               />
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { useLocalStorage } from 'usehooks-ts'
 
-import { randomInt, randomName } from '~/lib/utils'
+import { randomDate, randomInt, randomName } from '~/lib/utils'
 
 export function useCharacterStats() {
   const [characterStats, setCharacterStats] = useLocalStorage(
@@ -8,6 +8,10 @@ export function useCharacterStats() {
     {
       avatar: '',
       name: '',
+      birthday: {
+        label: '',
+        value: new Date(),
+      },
       age: 0,
       gender: '',
       profession: '',
@@ -20,9 +24,15 @@ export function useCharacterStats() {
   )
 
   const resetCharacterStats = () => {
+    const { label, value } = randomDate()
+
     setCharacterStats({
       avatar: randomInt(1, 100_000).toString(),
       name: randomName(),
+      birthday: {
+        label,
+        value,
+      },
       age: 0,
       gender: '',
       profession: '',
