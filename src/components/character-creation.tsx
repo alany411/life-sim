@@ -45,7 +45,6 @@ export function CharacterCreation() {
 
   return (
     <Card className='mx-auto w-full max-w-md'>
-      Hi Alan :)
       <CardHeader className='text-center'>
         <CardTitle className='text-3xl'>LifeSim</CardTitle>
         <CardDescription>Create your character</CardDescription>
