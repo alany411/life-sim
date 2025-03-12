@@ -53,7 +53,7 @@ export function CharacterCreation() {
         <div className='relative mb-4 flex items-center justify-center'>
           <RandomAvatar seed={avatar} size={15} />
         </div>
-        <form>
+        <form autoComplete='off'>
           <div className='grid w-full items-center gap-4'>
             <div className='flex flex-col space-y-1.5'>
               <Label htmlFor='name'>Name</Label>
