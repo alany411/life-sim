@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
-import { useState } from 'react'
+import type { ComponentProps } from 'react'
 
 import { Button } from './button'
 import { Calendar } from './calendar'
@@ -10,11 +10,24 @@ type DatePickerProps = {
   id?: string
   selected: Date
   onSelect: (date: Date) => void
+  calendarProps?: Omit<
+    ComponentProps<typeof Calendar>,
+    | 'autoFocus'
+    | 'defaultMonth'
+    | 'id'
+    | 'mode'
+    | 'selected'
+    | 'showYearSwitcher'
+    | 'onSelect'
+  >
 }
 
-function DatePicker({ id, selected, onSelect }: DatePickerProps) {
-  const [date, setDate] = useState<Date>(selected)
-
+function DatePicker({
+  id,
+  selected,
+  onSelect,
+  calendarProps,
+}: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild={true}>
@@ -28,16 +41,18 @@ function DatePicker({ id, selected, onSelect }: DatePickerProps) {
       </PopoverTrigger>
       <PopoverContent className='w-auto p-0'>
         <Calendar
+          autoFocus={true}
+          defaultMonth={selected}
           id={id}
-          initialFocus={true}
           mode='single'
-          selected={date}
+          selected={selected}
+          showYearSwitcher={false}
           onSelect={(date) => {
             if (date) {
-              setDate(date)
               onSelect(date)
             }
           }}
+          {...calendarProps}
         />
       </PopoverContent>
     </Popover>

@@ -72,6 +72,11 @@ export function CharacterCreation() {
               <DatePicker
                 id='birthday'
                 selected={birthday}
+                calendarProps={{
+                  formatters: {
+                    formatCaption: (date) => format(date, 'MMMM'),
+                  },
+                }}
                 onSelect={(date) => {
                   updateCharacterStats('birthday', date)
                 }}
