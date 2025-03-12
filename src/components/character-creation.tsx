@@ -1,7 +1,7 @@
 'use client'
 
 import { format } from 'date-fns'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import { useIsMounted } from 'usehooks-ts'
 
@@ -20,11 +20,13 @@ import {
 import { DatePicker } from './ui/date-picker'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
 export function CharacterCreation() {
   const { avatar, name, birthday, updateCharacterStats } = useCharacterStats()
   const { initialized, resetGame, updateGame } = useGame()
   const isMounted = useIsMounted()()
+  const [activeTab, setActiveTab] = useState('basic-info')
 
   useEffect(() => {
     if (!initialized) {
@@ -50,40 +52,55 @@ export function CharacterCreation() {
         <CardDescription>Create your character</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='relative mb-4 flex items-center justify-center'>
-          <RandomAvatar seed={avatar} size={15} />
-        </div>
-        <form autoComplete='off'>
-          <div className='grid w-full items-center gap-4'>
-            <div className='flex flex-col space-y-1.5'>
-              <Label htmlFor='name'>Name</Label>
-              <Input
-                id='name'
-                placeholder=''
-                type='text'
-                value={name}
-                onChange={(e) => {
-                  updateCharacterStats('name', e.target.value)
-                }}
-              />
+        <Tabs
+          defaultValue='basic-info'
+          value={activeTab}
+          onValueChange={setActiveTab}
+        >
+          <TabsList className='grid w-full grid-cols-2'>
+            <TabsTrigger value='basic-info'>Basic Info</TabsTrigger>
+            <TabsTrigger value='stats'>Stats</TabsTrigger>
+          </TabsList>
+
+          <TabsContent className='mt-4 space-y-4' value='basic-info'>
+            <div className='relative flex items-center justify-center'>
+              <RandomAvatar seed={avatar} size={15} />
             </div>
-            <div className='flex flex-col space-y-1.5'>
-              <Label htmlFor='birthday'>Birthday</Label>
-              <DatePicker
-                id='birthday'
-                selected={birthday}
-                calendarProps={{
-                  formatters: {
-                    formatCaption: (date) => format(date, 'MMMM'),
-                  },
-                }}
-                onSelect={(date) => {
-                  updateCharacterStats('birthday', date)
-                }}
-              />
+            <div className='grid w-full items-center gap-4'>
+              <div className='flex flex-col space-y-1.5'>
+                <Label htmlFor='name'>Name</Label>
+                <Input
+                  id='name'
+                  placeholder=''
+                  type='text'
+                  value={name}
+                  onChange={(e) => {
+                    updateCharacterStats('name', e.target.value)
+                  }}
+                />
+              </div>
+              <div className='flex flex-col space-y-1.5'>
+                <Label htmlFor='birthday'>Birthday</Label>
+                <DatePicker
+                  id='birthday'
+                  selected={birthday}
+                  calendarProps={{
+                    formatters: {
+                      formatCaption: (date) => format(date, 'MMMM'),
+                    },
+                  }}
+                  onSelect={(date) => {
+                    updateCharacterStats('birthday', date)
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        </form>
+          </TabsContent>
+
+          <TabsContent className='mt-4 space-y-4' value='stats'>
+            <div>Hi</div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
       <CardFooter className='flex gap-4'>
         <Button
