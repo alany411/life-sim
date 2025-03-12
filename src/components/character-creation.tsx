@@ -3,10 +3,12 @@
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
+import type { Entries } from 'type-fest'
 import { useIsMounted } from 'usehooks-ts'
 
 import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useGame } from '~/hooks/use-game'
+import { capitalize } from '~/lib/utils'
 
 import { Button } from './ui/button'
 import {
@@ -20,10 +22,20 @@ import {
 import { DatePicker } from './ui/date-picker'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from './ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
 export function CharacterCreation() {
-  const { avatar, name, birthday, updateCharacterStats } = useCharacterStats()
+  const { info, stats, updateCharacterStats } = useCharacterStats()
   const { initialized, resetGame, updateGame } = useGame()
   const isMounted = useIsMounted()()
   const [activeTab, setActiveTab] = useState('basic-info')
@@ -41,8 +53,16 @@ export function CharacterCreation() {
 
   const startLife = () => {
     window.alert(
-      `Congratulations! You were born on ${format(birthday, 'MMMM d')}. Your parents have named you ${name}.`
+      `Congratulations! You were born on ${format(info.birthday, 'MMMM d')}. Your parents have named you ${info.name}.`
     )
+  }
+
+  const statEmojis = {
+    agility: '🏃',
+    charisma: '✨',
+    intelligence: '🧠',
+    strength: '💪',
+    wisdom: '🔮',
   }
 
   return (
@@ -59,12 +79,12 @@ export function CharacterCreation() {
         >
           <TabsList className='grid w-full grid-cols-2'>
             <TabsTrigger value='basic-info'>Basic Info</TabsTrigger>
-            <TabsTrigger value='stats'>Stats</TabsTrigger>
+            <TabsTrigger value='stat-points'>Stat Points</TabsTrigger>
           </TabsList>
 
           <TabsContent className='mt-4 space-y-4' value='basic-info'>
             <div className='relative flex items-center justify-center'>
-              <RandomAvatar seed={avatar} size={15} />
+              <RandomAvatar seed={info.avatar} size={15} />
             </div>
             <div className='grid w-full items-center gap-4'>
               <div className='flex flex-col space-y-1.5'>
@@ -73,7 +93,7 @@ export function CharacterCreation() {
                   id='name'
                   placeholder=''
                   type='text'
-                  value={name}
+                  value={info.name}
                   onChange={(e) => {
                     updateCharacterStats('name', e.target.value)
                   }}
@@ -83,7 +103,7 @@ export function CharacterCreation() {
                 <Label htmlFor='birthday'>Birthday</Label>
                 <DatePicker
                   id='birthday'
-                  selected={birthday}
+                  selected={info.birthday}
                   calendarProps={{
                     formatters: {
                       formatCaption: (date) => format(date, 'MMMM'),
@@ -97,8 +117,41 @@ export function CharacterCreation() {
             </div>
           </TabsContent>
 
-          <TabsContent className='mt-4 space-y-4' value='stats'>
-            <div>Hi</div>
+          <TabsContent className='mt-4 space-y-4' value='stat-points'>
+            <Table>
+              <TableCaption>
+                You start a life with a total of 15 stat points.
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Stat</TableHead>
+                  <TableHead className='text-right'>Points</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(Object.entries(stats) as Entries<typeof stats>).map(
+                  ([stat, value]) => (
+                    <TableRow key={stat}>
+                      <TableCell>
+                        {statEmojis[stat]} {capitalize(stat)}
+                      </TableCell>
+                      <TableCell className='text-right'>{value}</TableCell>
+                    </TableRow>
+                  )
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={1}>Total</TableCell>
+                  <TableCell className='text-right'>
+                    {Object.values(stats).reduce(
+                      (acc, value) => acc + value,
+                      0
+                    )}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
           </TabsContent>
         </Tabs>
       </CardContent>

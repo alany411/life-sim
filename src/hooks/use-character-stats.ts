@@ -43,8 +43,26 @@ export function useCharacterStats() {
     setCharacterStats((prev) => ({ ...prev, [key]: value }))
   }
 
+  const info = {
+    avatar: characterStats.avatar,
+    name: characterStats.name,
+    birthday: characterStats.birthday,
+    age: characterStats.age,
+    gender: characterStats.gender,
+    profession: characterStats.profession,
+  }
+
+  const stats = {
+    agility: characterStats.agility,
+    charisma: characterStats.charisma,
+    intelligence: characterStats.intelligence,
+    strength: characterStats.strength,
+    wisdom: characterStats.wisdom,
+  }
+
   return {
-    ...characterStats,
+    info,
+    stats,
     resetCharacterStats,
     updateCharacterStats,
   }
