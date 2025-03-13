@@ -22,16 +22,7 @@ import {
 import { DatePicker } from './ui/date-picker'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from './ui/table'
+import { Progress } from './ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
 const statEmojis = {
@@ -51,7 +42,8 @@ export function CharacterCreation({
 }: CharacterCreationProps) {
   const { characterInfo, resetCharacterInfo, updateCharacterInfo } =
     useCharacterInfo()
-  const { characterStats, resetCharacterStats } = useCharacterStats()
+  const { characterStats, resetCharacterStats, zeroCharacterStats } =
+    useCharacterStats()
   const { updateGame } = useGame()
   const [activeTab, setActiveTab] = useState('basic-info')
 
@@ -120,45 +112,42 @@ export function CharacterCreation({
           </TabsContent>
 
           <TabsContent className='mt-4 space-y-4' value='stat-points'>
-            <Table>
-              <TableCaption>
-                You start a life with between{' '}
-                <span className='text-foreground font-medium'>5</span> and{' '}
-                <span className='text-foreground font-medium'>25</span> stat
-                points.
-              </TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Stat</TableHead>
-                  <TableHead className='text-right'>Points</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {(
-                  Object.entries(characterStats) as Entries<
-                    typeof characterStats
-                  >
-                ).map(([stat, value]) => (
-                  <TableRow key={stat}>
-                    <TableCell>
+            <div className='grid grid-cols-2 gap-1'>
+              {(
+                Object.entries(characterStats) as Entries<typeof characterStats>
+              ).map(([stat, point]) => (
+                <div
+                  key={stat}
+                  className='bg-muted flex flex-1 flex-col gap-2 rounded-lg p-3 text-sm'
+                >
+                  <div className='flex flex-1 flex-row items-center justify-between'>
+                    <div className='flex'>
                       {statEmojis[stat]} {capitalize(stat)}
-                    </TableCell>
-                    <TableCell className='text-right'>{value}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell colSpan={1}>Total</TableCell>
-                  <TableCell className='text-right'>
-                    {Object.values(characterStats).reduce(
-                      (acc, value) => acc + value,
-                      0
-                    )}
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
-            </Table>
+                    </div>
+                    <div className='flex font-bold'>{point}</div>
+                  </div>
+                  <Progress max={5} value={point} />
+                </div>
+              ))}
+              <Button
+                className='flex h-full flex-1 flex-col gap-0'
+                variant='destructive'
+                onClick={() => {
+                  zeroCharacterStats()
+                }}
+              >
+                <div>💀 Hard Mode</div>
+                <div className='text-xs font-normal text-white/75'>
+                  Set all stat points to 0
+                </div>
+              </Button>
+            </div>
+            <div className='text-muted-foreground text-center text-sm'>
+              You start a life with between{' '}
+              <span className='text-foreground font-medium'>0</span> and{' '}
+              <span className='text-foreground font-medium'>25</span> stat
+              points.
+            </div>
             <div className='flex'>
               <Button
                 className='flex flex-1'

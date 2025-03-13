@@ -16,11 +16,21 @@ export function useCharacterStats() {
 
   const resetCharacterStats = () => {
     setCharacterStats({
-      agility: randomInt(1, 5),
-      charisma: randomInt(1, 5),
-      intelligence: randomInt(1, 5),
-      strength: randomInt(1, 5),
-      wisdom: randomInt(1, 5),
+      agility: randomInt(0, 5),
+      charisma: randomInt(0, 5),
+      intelligence: randomInt(0, 5),
+      strength: randomInt(0, 5),
+      wisdom: randomInt(0, 5),
+    })
+  }
+
+  const zeroCharacterStats = () => {
+    setCharacterStats({
+      agility: 0,
+      charisma: 0,
+      intelligence: 0,
+      strength: 0,
+      wisdom: 0,
     })
   }
 
@@ -34,6 +44,7 @@ export function useCharacterStats() {
   return {
     characterStats,
     resetCharacterStats,
+    zeroCharacterStats,
     updateCharacterStats,
   }
 }
