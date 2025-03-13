@@ -81,6 +81,7 @@ export function Game() {
                 <PolarAngleAxis dataKey='stat' />
                 <PolarGrid />
                 <Radar
+                  animationDuration={0}
                   dataKey='point'
                   fill='var(--color-point)'
                   fillOpacity={0.6}

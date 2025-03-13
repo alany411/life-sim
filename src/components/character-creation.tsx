@@ -123,8 +123,8 @@ export function CharacterCreation({
             <Table>
               <TableCaption>
                 You start a life with between{' '}
-                <span className='text-foreground font-medium'>0</span> and{' '}
-                <span className='text-foreground font-medium'>15</span> stat
+                <span className='text-foreground font-medium'>5</span> and{' '}
+                <span className='text-foreground font-medium'>25</span> stat
                 points.
               </TableCaption>
               <TableHeader>
