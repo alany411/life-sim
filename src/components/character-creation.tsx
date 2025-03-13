@@ -26,8 +26,8 @@ import { Progress } from './ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
 const statEmojis = {
-  agility: '🏃',
   charisma: '✨',
+  dexterity: '🏃',
   intelligence: '🧠',
   strength: '💪',
   wisdom: '🔮',
