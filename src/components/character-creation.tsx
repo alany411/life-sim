@@ -42,7 +42,13 @@ const statEmojis = {
   wisdom: '🔮',
 }
 
-export function CharacterCreation() {
+type CharacterCreationProps = {
+  setShowCharacterModal: (show: boolean) => void
+}
+
+export function CharacterCreation({
+  setShowCharacterModal,
+}: CharacterCreationProps) {
   const { characterInfo, resetCharacterInfo, updateCharacterInfo } =
     useCharacterInfo()
   const { characterStats, resetCharacterStats } = useCharacterStats()
@@ -172,6 +178,7 @@ export function CharacterCreation() {
           className='flex flex-1'
           onClick={() => {
             updateGame('started', true)
+            setShowCharacterModal(true)
           }}
         >
           Start Life
