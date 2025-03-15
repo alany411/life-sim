@@ -42,130 +42,134 @@ export function CharacterCreation() {
   const [activeTab, setActiveTab] = useState('basic-info')
 
   return (
-    <Card className='mx-auto w-full max-w-md'>
-      <CardHeader className='text-center'>
-        <CardTitle className='text-3xl'>LifeSim</CardTitle>
-        <CardDescription>Create your character</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs
-          defaultValue='basic-info'
-          value={activeTab}
-          onValueChange={setActiveTab}
-        >
-          <TabsList className='grid w-full grid-cols-2'>
-            <TabsTrigger value='basic-info'>Basic Info</TabsTrigger>
-            <TabsTrigger value='stat-points'>Stat Points</TabsTrigger>
-          </TabsList>
+    <div className='flex flex-1 items-center justify-center'>
+      <Card className='mx-auto w-full max-w-md'>
+        <CardHeader className='text-center'>
+          <CardTitle className='text-3xl'>LifeSim</CardTitle>
+          <CardDescription>Create your character</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs
+            defaultValue='basic-info'
+            value={activeTab}
+            onValueChange={setActiveTab}
+          >
+            <TabsList className='grid w-full grid-cols-2'>
+              <TabsTrigger value='basic-info'>Basic Info</TabsTrigger>
+              <TabsTrigger value='stat-points'>Stat Points</TabsTrigger>
+            </TabsList>
 
-          <TabsContent className='mt-4 space-y-4' value='basic-info'>
-            <div className='relative flex items-center justify-center'>
-              <RandomAvatar seed={characterInfo.avatar} size={15} />
-            </div>
-            <div className='grid w-full items-center gap-4'>
-              <div className='flex flex-col space-y-1.5'>
-                <Label htmlFor='name'>Name</Label>
-                <Input
-                  autoComplete='off'
-                  id='name'
-                  placeholder=''
-                  type='text'
-                  value={characterInfo.name}
-                  onChange={(e) => {
-                    updateCharacterInfo('name', e.target.value)
-                  }}
-                />
+            <TabsContent className='mt-4 space-y-4' value='basic-info'>
+              <div className='relative flex items-center justify-center'>
+                <RandomAvatar seed={characterInfo.avatar} size={15} />
               </div>
-              <div className='flex flex-col space-y-1.5'>
-                <Label htmlFor='birthday'>Birthday</Label>
-                <DatePicker
-                  id='birthday'
-                  selected={characterInfo.birthday}
-                  calendarProps={{
-                    formatters: {
-                      formatCaption: (date) => format(date, 'MMMM'),
-                    },
-                  }}
-                  onSelect={(date) => {
-                    updateCharacterInfo('birthday', date)
-                  }}
-                />
+              <div className='grid w-full items-center gap-4'>
+                <div className='flex flex-col space-y-1.5'>
+                  <Label htmlFor='name'>Name</Label>
+                  <Input
+                    autoComplete='off'
+                    id='name'
+                    placeholder=''
+                    type='text'
+                    value={characterInfo.name}
+                    onChange={(e) => {
+                      updateCharacterInfo('name', e.target.value)
+                    }}
+                  />
+                </div>
+                <div className='flex flex-col space-y-1.5'>
+                  <Label htmlFor='birthday'>Birthday</Label>
+                  <DatePicker
+                    id='birthday'
+                    selected={characterInfo.birthday}
+                    calendarProps={{
+                      formatters: {
+                        formatCaption: (date) => format(date, 'MMMM'),
+                      },
+                    }}
+                    onSelect={(date) => {
+                      updateCharacterInfo('birthday', date)
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            <div className='flex'>
-              <Button
-                className='flex flex-1'
-                variant='secondary'
-                onClick={() => {
-                  resetCharacterInfo()
-                }}
-              >
-                🎲 Reroll Info
-              </Button>
-            </div>
-          </TabsContent>
-
-          <TabsContent className='mt-4 space-y-4' value='stat-points'>
-            <div className='grid grid-cols-2 gap-1'>
-              {(
-                Object.entries(characterStats) as Entries<typeof characterStats>
-              ).map(([stat, point]) => (
-                <div
-                  key={stat}
-                  className='bg-muted flex flex-1 flex-col gap-2 rounded-lg p-3 text-sm'
+              <div className='flex'>
+                <Button
+                  className='flex flex-1'
+                  variant='secondary'
+                  onClick={() => {
+                    resetCharacterInfo()
+                  }}
                 >
-                  <div className='flex flex-1 flex-row items-center justify-between'>
-                    <div className='flex'>
-                      {statEmojis[stat]} {capitalize(stat)}
+                  🎲 Reroll Info
+                </Button>
+              </div>
+            </TabsContent>
+
+            <TabsContent className='mt-4 space-y-4' value='stat-points'>
+              <div className='grid grid-cols-2 gap-1'>
+                {(
+                  Object.entries(characterStats) as Entries<
+                    typeof characterStats
+                  >
+                ).map(([stat, point]) => (
+                  <div
+                    key={stat}
+                    className='bg-muted flex flex-1 flex-col gap-2 rounded-lg p-3 text-sm'
+                  >
+                    <div className='flex flex-1 flex-row items-center justify-between'>
+                      <div className='flex'>
+                        {statEmojis[stat]} {capitalize(stat)}
+                      </div>
+                      <div className='flex font-bold'>{point}</div>
                     </div>
-                    <div className='flex font-bold'>{point}</div>
+                    <Progress max={5} value={point} />
                   </div>
-                  <Progress max={5} value={point} />
-                </div>
-              ))}
-              <Button
-                className='flex h-full flex-1 flex-col gap-0'
-                variant='destructive'
-                onClick={() => {
-                  zeroCharacterStats()
-                }}
-              >
-                <div>💀 Hard Mode</div>
-                <div className='text-xs font-normal text-white/75'>
-                  Set all stat points to 0
-                </div>
-              </Button>
-            </div>
-            <div className='text-muted-foreground text-center text-sm'>
-              You start a life with between{' '}
-              <span className='text-foreground font-medium'>0</span> and{' '}
-              <span className='text-foreground font-medium'>25</span> stat
-              points.
-            </div>
-            <div className='flex'>
-              <Button
-                className='flex flex-1'
-                variant='secondary'
-                onClick={() => {
-                  resetCharacterStats()
-                }}
-              >
-                🎲 Reroll Stat Points
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-      <CardFooter className='flex gap-4'>
-        <Button
-          className='flex flex-1'
-          onClick={() => {
-            updateGame('started', true)
-          }}
-        >
-          Start Life
-        </Button>
-      </CardFooter>
-    </Card>
+                ))}
+                <Button
+                  className='flex h-full flex-1 flex-col gap-0'
+                  variant='destructive'
+                  onClick={() => {
+                    zeroCharacterStats()
+                  }}
+                >
+                  <div>💀 Hard Mode</div>
+                  <div className='text-xs font-normal text-white/75'>
+                    Set all stat points to 0
+                  </div>
+                </Button>
+              </div>
+              <div className='text-muted-foreground text-center text-sm'>
+                You start a life with between{' '}
+                <span className='text-foreground font-medium'>0</span> and{' '}
+                <span className='text-foreground font-medium'>25</span> stat
+                points.
+              </div>
+              <div className='flex'>
+                <Button
+                  className='flex flex-1'
+                  variant='secondary'
+                  onClick={() => {
+                    resetCharacterStats()
+                  }}
+                >
+                  🎲 Reroll Stat Points
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+        <CardFooter className='flex gap-4'>
+          <Button
+            className='flex flex-1'
+            onClick={() => {
+              updateGame('started', true)
+            }}
+          >
+            Start Life
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }
