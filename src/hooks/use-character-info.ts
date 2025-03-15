@@ -10,6 +10,7 @@ export function useCharacterInfo() {
     age: 0,
     gender: '',
     profession: '',
+    money: 0,
   })
 
   const resetCharacterInfo = () => {
@@ -20,6 +21,7 @@ export function useCharacterInfo() {
       age: 0,
       gender: '',
       profession: '',
+      money: 0,
     })
   }
 
