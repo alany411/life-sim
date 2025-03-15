@@ -1,6 +1,7 @@
 'use client'
 
 import { format } from 'date-fns'
+import { LucideSettings as LucideSettingsIcon } from 'lucide-react'
 import { useState } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import type { Entries } from 'type-fest'
@@ -8,8 +9,22 @@ import type { Entries } from 'type-fest'
 import { useCharacterInfo } from '~/hooks/use-character-info'
 import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useCharacterStatus } from '~/hooks/use-character-status'
+import { useGame } from '~/hooks/use-game'
 import { formatCurrency } from '~/lib/utils'
 
+import { Modal } from './modal'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from './ui/alert-dialog'
+import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
 import { Progress } from './ui/progress'
 import { Separator } from './ui/separator'
@@ -19,97 +34,146 @@ export function Dashboard() {
   const { characterInfo } = useCharacterInfo()
   const { characterStats } = useCharacterStats()
   const { characterStatus } = useCharacterStatus()
+  const { resetGame } = useGame()
   const [activeTab, setActiveTab] = useState('1')
-
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   return (
     <div className='mx-auto flex max-w-6xl flex-1 flex-col gap-4'>
       <Card>
         <CardContent>
-          <div className='flex flex-col gap-6 py-4 md:flex-row'>
-            <div className='flex flex-shrink-0 gap-6'>
-              <RandomAvatar seed={characterInfo.avatar} size={15} />
-              <div className='flex flex-col gap-4'>
-                <div>
-                  <div className='text-3xl font-semibold'>
-                    {characterInfo.name}
-                  </div>
-                  <div className='text-muted-foreground flex gap-2 text-sm'>
-                    <span>{characterInfo.age} years old</span>
-                    <span>•</span>
-                    <span>
-                      Born {format(characterInfo.birthday, 'MMMM dd')}
-                    </span>
-                  </div>
-                </div>
-                <div className='flex items-center gap-6'>
-                  <div className='flex flex-col'>
-                    <div className='text-muted-foreground text-sm'>
-                      Profession
+          <div className='flex gap-6'>
+            <div className='flex flex-1 flex-col gap-6 py-4 md:flex-row'>
+              <div className='flex flex-shrink-0 gap-6'>
+                <RandomAvatar seed={characterInfo.avatar} size={15} />
+                <div className='flex flex-col gap-4'>
+                  <div>
+                    <div className='text-3xl font-semibold'>
+                      {characterInfo.name}
                     </div>
-                    <div>{characterInfo.profession || 'Unemployed'}</div>
-                  </div>
-                  <div className='flex flex-col'>
-                    <div className='text-muted-foreground text-sm'>
-                      Net Worth
+                    <div className='text-muted-foreground flex gap-2 text-sm'>
+                      <span>{characterInfo.age} years old</span>
+                      <span>•</span>
+                      <span>
+                        Born {format(characterInfo.birthday, 'MMMM dd')}
+                      </span>
                     </div>
-                    <div>{formatCurrency(characterInfo.money)}</div>
                   </div>
-                </div>
-                <div className='flex flex-row flex-wrap gap-2'>
-                  {(
-                    Object.entries(characterStats) as Entries<
-                      typeof characterStats
-                    >
-                  ).map(([stat, point]) => {
-                    return (
-                      <div
-                        key={stat}
-                        className='bg-muted flex aspect-square h-13 flex-col items-center justify-center rounded-lg text-sm/4'
-                      >
-                        <div className='font-bold tracking-wider tabular-nums'>
-                          {stat.slice(0, 3).toUpperCase()}
-                        </div>
-                        <div className='tabular-nums'>{point}</div>
+                  <div className='flex items-center gap-6'>
+                    <div className='flex flex-col'>
+                      <div className='text-muted-foreground text-sm'>
+                        Profession
                       </div>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-
-            <div className='h-auto'>
-              <Separator orientation='vertical' />
-            </div>
-
-            <div className='flex flex-1 flex-col gap-2'>
-              <div className='flex flex-col gap-1'>
-                <div className='flex items-center justify-between'>
-                  <div className='text-sm font-medium'>Happiness</div>
-                  <div className='text-muted-foreground text-sm tabular-nums'>
-                    {characterStatus.happiness}%
+                      <div>{characterInfo.profession || 'Unemployed'}</div>
+                    </div>
+                    <div className='flex flex-col'>
+                      <div className='text-muted-foreground text-sm'>
+                        Net Worth
+                      </div>
+                      <div>{formatCurrency(characterInfo.money)}</div>
+                    </div>
+                  </div>
+                  <div className='flex flex-row flex-wrap gap-2'>
+                    {(
+                      Object.entries(characterStats) as Entries<
+                        typeof characterStats
+                      >
+                    ).map(([stat, point]) => {
+                      return (
+                        <div
+                          key={stat}
+                          className='bg-muted flex aspect-square h-13 flex-col items-center justify-center rounded-lg text-sm/4'
+                        >
+                          <div className='font-bold tracking-wider tabular-nums'>
+                            {stat.slice(0, 3).toUpperCase()}
+                          </div>
+                          <div className='tabular-nums'>{point}</div>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
-                <Progress
-                  className='h-2'
-                  max={100}
-                  value={characterStatus.happiness}
-                />
               </div>
 
-              <div className='flex flex-col gap-1'>
-                <div className='flex items-center justify-between'>
-                  <div className='text-sm font-medium'>Health</div>
-                  <div className='text-muted-foreground text-sm tabular-nums'>
-                    {characterStatus.health}%
+              <div className='hidden h-auto md:block'>
+                <Separator orientation='vertical' />
+              </div>
+
+              <div className='flex flex-1 flex-col gap-2'>
+                <div className='flex flex-col gap-1'>
+                  <div className='flex items-center justify-between'>
+                    <div className='text-sm font-medium'>Happiness</div>
+                    <div className='text-muted-foreground text-sm tabular-nums'>
+                      {characterStatus.happiness}%
+                    </div>
                   </div>
+                  <Progress
+                    className='h-2'
+                    max={100}
+                    value={characterStatus.happiness}
+                  />
                 </div>
-                <Progress
-                  className='h-2'
-                  max={100}
-                  value={characterStatus.health}
-                />
+
+                <div className='flex flex-col gap-1'>
+                  <div className='flex items-center justify-between'>
+                    <div className='text-sm font-medium'>Health</div>
+                    <div className='text-muted-foreground text-sm tabular-nums'>
+                      {characterStatus.health}%
+                    </div>
+                  </div>
+                  <Progress
+                    className='h-2'
+                    max={100}
+                    value={characterStatus.health}
+                  />
+                </div>
               </div>
             </div>
+            <Button
+              size='icon'
+              variant='outline'
+              onClick={() => {
+                setIsSettingsModalOpen(true)
+              }}
+            >
+              <LucideSettingsIcon />
+            </Button>
+            <Modal
+              open={isSettingsModalOpen}
+              setOpen={setIsSettingsModalOpen}
+              title='Settings'
+              content={
+                <div className='flex flex-1'>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild={true}>
+                      <Button className='w-full' variant='destructive'>
+                        Reset Life
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. Continuing will end this
+                          current life so you can start a new one.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => {
+                            resetGame()
+                          }}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              }
+            />
           </div>
         </CardContent>
       </Card>

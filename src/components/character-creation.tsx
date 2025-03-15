@@ -134,7 +134,7 @@ export function CharacterCreation() {
                   }}
                 >
                   <div>💀 Hard Mode</div>
-                  <div className='text-xs font-normal text-white/75'>
+                  <div className='text-xs font-normal'>
                     Set all stat points to 0
                   </div>
                 </Button>
