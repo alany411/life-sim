@@ -27,7 +27,6 @@ import {
 import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
 import { Progress } from './ui/progress'
-import { Separator } from './ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
 export function Dashboard() {
@@ -56,9 +55,9 @@ export function Dashboard() {
       <div className='mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 p-4'>
         <Card>
           <CardContent>
-            <div className='flex flex-1 flex-col gap-6 py-4 md:flex-row'>
-              <div className='flex flex-shrink-0 gap-6'>
-                <RandomAvatar seed={characterInfo.avatar} size={15} />
+            <div className='flex flex-1 flex-col gap-6 md:flex-row'>
+              <div className='flex w-full items-center justify-center gap-4 md:max-w-1/2'>
+                <RandomAvatar seed={characterInfo.avatar} size={12} />
                 <div className='flex flex-col gap-4'>
                   <div>
                     <div className='text-3xl font-semibold'>
@@ -86,6 +85,10 @@ export function Dashboard() {
                       <div>{formatCurrency(characterInfo.money)}</div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className='flex w-full flex-1 flex-col gap-2 md:max-w-1/2'>
+                <div className='flex justify-center'>
                   <div className='flex flex-row flex-wrap gap-2'>
                     {(
                       Object.entries(characterStats) as Entries<
@@ -95,7 +98,7 @@ export function Dashboard() {
                       return (
                         <div
                           key={stat}
-                          className='bg-muted flex aspect-square h-13 flex-col items-center justify-center rounded-lg text-sm/4'
+                          className='bg-muted flex aspect-square h-12 flex-col items-center justify-center rounded-lg text-sm/4'
                         >
                           <div className='font-bold tracking-wider tabular-nums'>
                             {stat.slice(0, 3).toUpperCase()}
@@ -104,15 +107,19 @@ export function Dashboard() {
                         </div>
                       )
                     })}
+                    <div className='bg-primary text-muted flex aspect-square h-12 flex-col items-center justify-center rounded-lg text-sm/4'>
+                      <div className='font-bold tracking-wider tabular-nums'>
+                        TOT
+                      </div>
+                      <div className='tabular-nums'>
+                        {Object.values(characterStats).reduce(
+                          (acc, curr) => acc + curr,
+                          0
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className='hidden h-auto md:block'>
-                <Separator orientation='vertical' />
-              </div>
-
-              <div className='flex flex-1 flex-col gap-2'>
                 <div className='flex flex-col gap-1'>
                   <div className='flex items-center justify-between'>
                     <div className='text-sm font-medium'>Happiness</div>
