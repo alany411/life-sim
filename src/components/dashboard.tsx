@@ -10,7 +10,7 @@ import { useCharacterInfo } from '~/hooks/use-character-info'
 import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useCharacterStatus } from '~/hooks/use-character-status'
 import { useGame } from '~/hooks/use-game'
-import { formatCurrency } from '~/lib/utils'
+import { cn, formatCurrency } from '~/lib/utils'
 
 import { Modal } from './modal'
 import {
@@ -90,7 +90,14 @@ export function Dashboard() {
                     </div>
                     <div className='flex flex-col'>
                       <div className='text-muted-foreground text-sm'>Money</div>
-                      <div>{formatCurrency(characterInfo.money)}</div>
+                      <div
+                        className={cn(
+                          characterInfo.money > 0 && 'text-positive-money',
+                          characterInfo.money < 0 && 'text-negative-money'
+                        )}
+                      >
+                        {formatCurrency(characterInfo.money)}
+                      </div>
                     </div>
                   </div>
                 </div>
