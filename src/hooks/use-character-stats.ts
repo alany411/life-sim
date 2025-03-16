@@ -3,7 +3,7 @@ import { useLocalStorage } from 'usehooks-ts'
 import { randomInt } from '~/lib/utils'
 
 export function useCharacterStats() {
-  const [characterStats, setCharacterStats] = useLocalStorage(
+  const [characterStats, setCharacterStats] = useLocalStorage<CharacterStats>(
     'character-stats',
     {
       charisma: 0,
@@ -34,9 +34,9 @@ export function useCharacterStats() {
     })
   }
 
-  const updateCharacterStats = <K extends keyof typeof characterStats>(
+  const updateCharacterStats = <K extends keyof CharacterStats>(
     key: K,
-    value: (typeof characterStats)[K]
+    value: CharacterStats[K]
   ) => {
     setCharacterStats((prev) => ({ ...prev, [key]: value }))
   }
