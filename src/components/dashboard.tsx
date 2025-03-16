@@ -36,6 +36,16 @@ export function Dashboard() {
   const { resetGame } = useGame()
   const [activeTab, setActiveTab] = useState('1')
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
+
+  const characterStatsEntries = Object.entries(
+    characterStats
+  ) as Entries<CharacterStats>
+
+  const characterStatsTotal = Object.values(characterStats).reduce(
+    (acc, curr) => acc + curr,
+    0
+  )
+
   return (
     <div className='flex flex-1 flex-col'>
       <div className='bg-sidebar text-sidebar-foreground border-sidebar-border flex w-full border-b'>
@@ -90,11 +100,7 @@ export function Dashboard() {
               <div className='flex w-full flex-1 flex-col gap-2 md:max-w-1/2'>
                 <div className='flex justify-center'>
                   <div className='flex flex-row flex-wrap gap-2'>
-                    {(
-                      Object.entries(characterStats) as Entries<
-                        typeof characterStats
-                      >
-                    ).map(([stat, point]) => {
+                    {characterStatsEntries.map(([stat, point]) => {
                       return (
                         <div
                           key={stat}
@@ -111,12 +117,7 @@ export function Dashboard() {
                       <div className='font-bold tracking-wider tabular-nums'>
                         TOT
                       </div>
-                      <div className='tabular-nums'>
-                        {Object.values(characterStats).reduce(
-                          (acc, curr) => acc + curr,
-                          0
-                        )}
-                      </div>
+                      <div className='tabular-nums'>{characterStatsTotal}</div>
                     </div>
                   </div>
                 </div>
