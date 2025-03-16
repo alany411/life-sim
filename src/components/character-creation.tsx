@@ -52,6 +52,15 @@ export function CharacterCreation() {
   const { updateGame } = useGame()
   const [activeTab, setActiveTab] = useState('basic-info')
 
+  const characterStatsEntries = Object.entries(
+    characterStats
+  ) as Entries<CharacterStats>
+
+  const characterStatsTotal = Object.values(characterStats).reduce(
+    (acc, curr) => acc + curr,
+    0
+  )
+
   return (
     <div className='flex flex-1 items-center justify-center p-4'>
       <Card className='mx-auto w-full max-w-md'>
@@ -119,11 +128,7 @@ export function CharacterCreation() {
 
             <TabsContent className='mt-4 space-y-4' value='stat-points'>
               <div className='grid grid-cols-2 gap-1'>
-                {(
-                  Object.entries(characterStats) as Entries<
-                    typeof characterStats
-                  >
-                ).map(([stat, point]) => (
+                {characterStatsEntries.map(([stat, point]) => (
                   <div
                     key={stat}
                     className='bg-muted flex flex-1 flex-col gap-2 rounded-lg p-3 text-sm'
@@ -142,20 +147,12 @@ export function CharacterCreation() {
                     <div className='flex'>
                       <span className='invert'>🟰</span> Total
                     </div>
-                    <div className='flex font-bold'>
-                      {Object.values(characterStats).reduce(
-                        (acc, curr) => acc + curr,
-                        0
-                      )}
-                    </div>
+                    <div className='flex font-bold'>{characterStatsTotal}</div>
                   </div>
                   <Progress
                     max={25}
                     title='Total points'
-                    value={Object.values(characterStats).reduce(
-                      (acc, curr) => acc + curr,
-                      0
-                    )}
+                    value={characterStatsTotal}
                   />
                 </div>
               </div>
