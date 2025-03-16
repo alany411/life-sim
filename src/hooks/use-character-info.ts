@@ -3,15 +3,18 @@ import { useLocalStorage } from 'usehooks-ts'
 import { randomDate, randomInt, randomName } from '~/lib/utils'
 
 export function useCharacterInfo() {
-  const [characterInfo, setCharacterInfo] = useLocalStorage('character-info', {
-    avatar: '',
-    name: '',
-    birthday: new Date(),
-    age: 0,
-    gender: '',
-    profession: '',
-    money: 0,
-  })
+  const [characterInfo, setCharacterInfo] = useLocalStorage<CharacterInfo>(
+    'character-info',
+    {
+      avatar: '',
+      name: '',
+      birthday: new Date(),
+      age: 0,
+      gender: '',
+      profession: '',
+      money: 0,
+    }
+  )
 
   const resetCharacterInfo = () => {
     setCharacterInfo({
@@ -25,9 +28,9 @@ export function useCharacterInfo() {
     })
   }
 
-  const updateCharacterInfo = <K extends keyof typeof characterInfo>(
+  const updateCharacterInfo = <K extends keyof CharacterInfo>(
     key: K,
-    value: (typeof characterInfo)[K]
+    value: CharacterInfo[K]
   ) => {
     setCharacterInfo((prev) => ({ ...prev, [key]: value }))
   }
