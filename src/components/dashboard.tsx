@@ -89,9 +89,7 @@ export function Dashboard() {
                       <div>{characterInfo.profession || 'Unemployed'}</div>
                     </div>
                     <div className='flex flex-col'>
-                      <div className='text-muted-foreground text-sm'>
-                        Net Worth
-                      </div>
+                      <div className='text-muted-foreground text-sm'>Money</div>
                       <div>{formatCurrency(characterInfo.money)}</div>
                     </div>
                   </div>
