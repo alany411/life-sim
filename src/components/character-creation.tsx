@@ -42,7 +42,7 @@ export function CharacterCreation() {
   const [activeTab, setActiveTab] = useState('basic-info')
 
   return (
-    <div className='flex flex-1 items-center justify-center'>
+    <div className='flex flex-1 items-center justify-center p-4'>
       <Card className='mx-auto w-full max-w-md'>
         <CardHeader className='text-center'>
           <CardTitle className='text-3xl'>LifeSim</CardTitle>

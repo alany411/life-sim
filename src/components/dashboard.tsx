@@ -38,10 +38,24 @@ export function Dashboard() {
   const [activeTab, setActiveTab] = useState('1')
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   return (
-    <div className='mx-auto flex max-w-6xl flex-1 flex-col gap-4'>
-      <Card>
-        <CardContent>
-          <div className='flex gap-6'>
+    <div className='flex flex-1 flex-col'>
+      <div className='bg-sidebar text-sidebar-foreground border-sidebar-border flex w-full border-b'>
+        <div className='mx-auto flex w-full max-w-6xl flex-1 items-center justify-between p-4 text-3xl leading-none font-semibold'>
+          <div>LifeSim</div>
+          <Button
+            size='icon'
+            variant='ghost'
+            onClick={() => {
+              setIsSettingsModalOpen(true)
+            }}
+          >
+            <LucideSettingsIcon className='size-6' />
+          </Button>
+        </div>
+      </div>
+      <div className='mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 p-4'>
+        <Card>
+          <CardContent>
             <div className='flex flex-1 flex-col gap-6 py-4 md:flex-row'>
               <div className='flex flex-shrink-0 gap-6'>
                 <RandomAvatar seed={characterInfo.avatar} size={15} />
@@ -128,72 +142,62 @@ export function Dashboard() {
                 </div>
               </div>
             </div>
-            <Button
-              size='icon'
-              variant='outline'
-              onClick={() => {
-                setIsSettingsModalOpen(true)
-              }}
-            >
-              <LucideSettingsIcon />
-            </Button>
-            <Modal
-              open={isSettingsModalOpen}
-              setOpen={setIsSettingsModalOpen}
-              title='Settings'
-              content={
-                <div className='flex flex-1'>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild={true}>
-                      <Button className='w-full' variant='destructive'>
-                        Reset Life
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. Continuing will end this
-                          current life so you can start a new one.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => {
-                            resetGame()
-                          }}
-                        >
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              }
-            />
-          </div>
-        </CardContent>
-      </Card>
-      <Tabs defaultValue='1' value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className='grid w-full grid-cols-5'>
-          <TabsTrigger value='1'>Some Tab 1</TabsTrigger>
-          <TabsTrigger value='2'>Some Tab 2</TabsTrigger>
-          <TabsTrigger value='3'>Some Tab 3</TabsTrigger>
-          <TabsTrigger value='4'>Some Tab 4</TabsTrigger>
-          <TabsTrigger value='5'>Some Tab 5</TabsTrigger>
+          </CardContent>
+        </Card>
+        <Tabs defaultValue='1' value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className='grid w-full grid-cols-5'>
+            <TabsTrigger value='1'>Some Tab 1</TabsTrigger>
+            <TabsTrigger value='2'>Some Tab 2</TabsTrigger>
+            <TabsTrigger value='3'>Some Tab 3</TabsTrigger>
+            <TabsTrigger value='4'>Some Tab 4</TabsTrigger>
+            <TabsTrigger value='5'>Some Tab 5</TabsTrigger>
 
-          <TabsContent className='col-span-5 mt-5' value='1'>
-            <Card>
-              <CardContent>
-                <div>Tab 1</div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </TabsList>
-      </Tabs>
+            <TabsContent className='col-span-5 mt-5' value='1'>
+              <Card>
+                <CardContent>
+                  <div>Tab 1</div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <Modal
+        open={isSettingsModalOpen}
+        setOpen={setIsSettingsModalOpen}
+        title='Settings'
+        content={
+          <div className='flex flex-1'>
+            <AlertDialog>
+              <AlertDialogTrigger asChild={true}>
+                <Button className='w-full' variant='destructive'>
+                  Reset Life
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. Continuing will end this
+                    current life so you can start a new one.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      resetGame()
+                    }}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        }
+      />
     </div>
   )
 }
