@@ -6,7 +6,7 @@ import { useCharacterStats } from './use-character-stats'
 import { useCharacterStatus } from './use-character-status'
 
 export function useGame() {
-  const [game, setGame] = useLocalStorage('game', {
+  const [game, setGame] = useLocalStorage<Game>('game', {
     initialized: false,
     started: false,
   })
@@ -23,10 +23,7 @@ export function useGame() {
     setGame((prev) => ({ ...prev, started: false }))
   }
 
-  const updateGame = <K extends keyof typeof game>(
-    key: K,
-    value: (typeof game)[K]
-  ) => {
+  const updateGame = <K extends keyof Game>(key: K, value: Game[K]) => {
     setGame((prev) => ({ ...prev, [key]: value }))
   }
 
