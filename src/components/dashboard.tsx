@@ -130,6 +130,7 @@ export function Dashboard() {
                   <Progress
                     className='h-2'
                     max={100}
+                    title='Happiness percentage'
                     value={characterStatus.happiness}
                   />
                 </div>
@@ -144,6 +145,7 @@ export function Dashboard() {
                   <Progress
                     className='h-2'
                     max={100}
+                    title='Health percentage'
                     value={characterStatus.health}
                   />
                 </div>
