@@ -107,7 +107,7 @@ export function Dashboard() {
                         </div>
                       )
                     })}
-                    <div className='bg-primary text-muted flex aspect-square h-12 flex-col items-center justify-center rounded-lg text-sm/4'>
+                    <div className='bg-muted flex aspect-square h-12 flex-col items-center justify-center rounded-lg text-sm/4 invert'>
                       <div className='font-bold tracking-wider tabular-nums'>
                         TOT
                       </div>

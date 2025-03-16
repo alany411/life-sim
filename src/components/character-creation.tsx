@@ -134,12 +134,14 @@ export function CharacterCreation() {
                       </div>
                       <div className='flex font-bold'>{point}</div>
                     </div>
-                    <Progress max={5} value={point} />
+                    <Progress max={5} title={`${stat} points`} value={point} />
                   </div>
                 ))}
-                <div className='bg-muted flex flex-1 flex-col gap-2 rounded-lg p-3 text-sm'>
+                <div className='bg-muted flex flex-1 flex-col gap-2 rounded-lg p-3 text-sm invert'>
                   <div className='flex flex-1 flex-row items-center justify-between'>
-                    <div className='flex'>🟰 Total</div>
+                    <div className='flex'>
+                      <span className='invert'>🟰</span> Total
+                    </div>
                     <div className='flex font-bold'>
                       {Object.values(characterStats).reduce(
                         (acc, curr) => acc + curr,
@@ -149,6 +151,7 @@ export function CharacterCreation() {
                   </div>
                   <Progress
                     max={25}
+                    title='Total points'
                     value={Object.values(characterStats).reduce(
                       (acc, curr) => acc + curr,
                       0
