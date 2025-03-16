@@ -10,6 +10,17 @@ import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useGame } from '~/hooks/use-game'
 import { capitalize } from '~/lib/utils'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from './ui/alert-dialog'
 import { Button } from './ui/button'
 import {
   Card,
@@ -126,18 +137,24 @@ export function CharacterCreation() {
                     <Progress max={5} value={point} />
                   </div>
                 ))}
-                <Button
-                  className='flex h-full flex-1 flex-col gap-0'
-                  variant='destructive'
-                  onClick={() => {
-                    zeroCharacterStats()
-                  }}
-                >
-                  <div>💀 Hard Mode</div>
-                  <div className='text-xs font-normal'>
-                    Set all stat points to 0
+                <div className='bg-muted flex flex-1 flex-col gap-2 rounded-lg p-3 text-sm'>
+                  <div className='flex flex-1 flex-row items-center justify-between'>
+                    <div className='flex'>🟰 Total</div>
+                    <div className='flex font-bold'>
+                      {Object.values(characterStats).reduce(
+                        (acc, curr) => acc + curr,
+                        0
+                      )}
+                    </div>
                   </div>
-                </Button>
+                  <Progress
+                    max={25}
+                    value={Object.values(characterStats).reduce(
+                      (acc, curr) => acc + curr,
+                      0
+                    )}
+                  />
+                </div>
               </div>
               <div className='text-muted-foreground text-center text-sm'>
                 You start a life with between{' '}
@@ -145,7 +162,36 @@ export function CharacterCreation() {
                 <span className='text-foreground font-medium'>25</span> stat
                 points.
               </div>
-              <div className='flex'>
+              <div className='flex flex-col gap-2'>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild={true}>
+                    <Button className='flex flex-1' variant='destructive'>
+                      💀 Hard Mode
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. Continuing will set your
+                        stats to 0.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => {
+                          zeroCharacterStats()
+                        }}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
                 <Button
                   className='flex flex-1'
                   variant='secondary'
