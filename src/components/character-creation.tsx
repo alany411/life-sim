@@ -166,6 +166,16 @@ export function CharacterCreation() {
                 points.
               </div>
               <div className='flex flex-col gap-2'>
+                <Button
+                  className='flex flex-1'
+                  variant='secondary'
+                  onClick={() => {
+                    resetCharacterStats()
+                  }}
+                >
+                  🎲 Reroll Stat Points
+                </Button>
+
                 <AlertDialog>
                   <AlertDialogTrigger asChild={true}>
                     <Button className='flex flex-1' variant='destructive'>
@@ -194,16 +204,6 @@ export function CharacterCreation() {
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-
-                <Button
-                  className='flex flex-1'
-                  variant='secondary'
-                  onClick={() => {
-                    resetCharacterStats()
-                  }}
-                >
-                  🎲 Reroll Stat Points
-                </Button>
               </div>
             </TabsContent>
           </Tabs>
