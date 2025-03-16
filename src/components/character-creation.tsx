@@ -10,17 +10,7 @@ import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useGame } from '~/hooks/use-game'
 import { capitalize } from '~/lib/utils'
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from './ui/alert-dialog'
+import { AlertModal } from './alert-modal'
 import { Button } from './ui/button'
 import {
   Card,
@@ -173,34 +163,17 @@ export function CharacterCreation() {
                   🎲 Reroll Stat Points
                 </Button>
 
-                <AlertDialog>
-                  <AlertDialogTrigger asChild={true}>
+                <AlertModal
+                  description='This action cannot be undone. Continuing will set your stats to 0.'
+                  trigger={
                     <Button className='flex flex-1' variant='destructive'>
                       💀 Hard Mode
                     </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. Continuing will set your
-                        stats to 0.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => {
-                          zeroCharacterStats()
-                        }}
-                      >
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                  }
+                  onConfirm={() => {
+                    zeroCharacterStats()
+                  }}
+                />
               </div>
             </TabsContent>
           </Tabs>

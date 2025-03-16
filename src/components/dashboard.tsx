@@ -12,18 +12,8 @@ import { useCharacterStatus } from '~/hooks/use-character-status'
 import { useGame } from '~/hooks/use-game'
 import { cn, formatCurrency } from '~/lib/utils'
 
+import { AlertModal } from './alert-modal'
 import { Modal } from './modal'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from './ui/alert-dialog'
 import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
 import { Progress } from './ui/progress'
@@ -183,34 +173,17 @@ export function Dashboard() {
         setOpen={setIsSettingsModalOpen}
         title='Settings'
         content={
-          <div className='flex flex-1'>
-            <AlertDialog>
-              <AlertDialogTrigger asChild={true}>
-                <Button className='w-full' variant='destructive'>
-                  Reset Life
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. Continuing will end this
-                    current life so you can start a new one.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      resetGame()
-                    }}
-                  >
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
+          <AlertModal
+            description='This action cannot be undone. Continuing will end this current life so you can start a new one.'
+            trigger={
+              <Button className='w-full' variant='destructive'>
+                Reset Life
+              </Button>
+            }
+            onConfirm={() => {
+              resetGame()
+            }}
+          />
         }
       />
     </div>
