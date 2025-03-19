@@ -23,7 +23,7 @@ export function Dashboard() {
   const { characterInfo } = useCharacterInfo()
   const { characterStats } = useCharacterStats()
   const { characterStatus } = useCharacterStatus()
-  const { resetGame } = useGame()
+  const { updateGame } = useGame()
   const [activeTab, setActiveTab] = useState('1')
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
 
@@ -181,7 +181,7 @@ export function Dashboard() {
               </Button>
             }
             onConfirm={() => {
-              resetGame()
+              updateGame('started', false)
             }}
           />
         }
