@@ -2,6 +2,8 @@
 
 import { format } from 'date-fns'
 import {
+  CopyIcon,
+  DownloadIcon,
   LucideSettings as LucideSettingsIcon,
   MonitorIcon,
   MoonIcon,
@@ -26,15 +28,18 @@ import { Card, CardContent } from './ui/card'
 import { Progress } from './ui/progress'
 import { Separator } from './ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
+import { Textarea } from './ui/textarea'
 
 export function Dashboard() {
   const { characterInfo } = useCharacterInfo()
   const { characterStats } = useCharacterStats()
   const { characterStatus } = useCharacterStatus()
-  const { updateGame } = useGame()
+  const { updateGame, exportGameSave, importGameSave } = useGame()
   const { theme, setTheme } = useTheme()
-  const [activeTab, setActiveTab] = useState('1')
+  const [activeDashboardTab, setActiveDashboardTab] = useState('1')
+  const [activeGameSaveTab, setActiveGameSaveTab] = useState('export')
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
+  const [importGameSaveCode, setImportGameSaveCode] = useState('')
 
   const characterStatsEntries = Object.entries(
     characterStats
@@ -159,7 +164,11 @@ export function Dashboard() {
             </div>
           </CardContent>
         </Card>
-        <Tabs defaultValue='1' value={activeTab} onValueChange={setActiveTab}>
+        <Tabs
+          defaultValue='1'
+          value={activeDashboardTab}
+          onValueChange={setActiveDashboardTab}
+        >
           <TabsList className='grid w-full grid-cols-5'>
             <TabsTrigger value='1'>Some Tab 1</TabsTrigger>
             <TabsTrigger value='2'>Some Tab 2</TabsTrigger>
@@ -201,6 +210,58 @@ export function Dashboard() {
                     <span className='sr-only sm:not-sr-only'>Dark</span>
                   </TabsTrigger>
                 </TabsList>
+              </Tabs>
+            </div>
+            <div className='flex flex-col gap-2'>
+              <div className='text-sm font-medium'>Game Save</div>
+              <Tabs
+                defaultValue='export'
+                value={activeGameSaveTab}
+                onValueChange={setActiveGameSaveTab}
+              >
+                <TabsList className='grid w-full grid-cols-2'>
+                  <TabsTrigger value='export'>Export</TabsTrigger>
+                  <TabsTrigger value='import'>Import</TabsTrigger>
+                </TabsList>
+                <TabsContent value='export'>
+                  <div className='flex flex-col gap-2'>
+                    <Textarea
+                      className='min-h-32 break-all'
+                      defaultValue={exportGameSave()}
+                      readOnly={true}
+                      onClick={(e) => {
+                        e.currentTarget.select()
+                      }}
+                    />
+                    <Button
+                      onClick={() => {
+                        void navigator.clipboard.writeText(exportGameSave())
+                      }}
+                    >
+                      <CopyIcon aria-hidden='true' className='size-4' /> Copy to
+                      Clipboard
+                    </Button>
+                  </div>
+                </TabsContent>
+                <TabsContent value='import'>
+                  <div className='flex flex-col gap-2'>
+                    <Textarea
+                      className='min-h-32 break-all'
+                      defaultValue={importGameSaveCode}
+                      onChange={(e) => {
+                        setImportGameSaveCode(e.currentTarget.value)
+                      }}
+                    />
+                    <Button
+                      onClick={() => {
+                        importGameSave(importGameSaveCode)
+                      }}
+                    >
+                      <DownloadIcon aria-hidden='true' className='size-4' />
+                      Import Save
+                    </Button>
+                  </div>
+                </TabsContent>
               </Tabs>
             </div>
             <Separator />

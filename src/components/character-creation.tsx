@@ -1,6 +1,7 @@
 'use client'
 
 import { format } from 'date-fns'
+import { DicesIcon, DownloadIcon, SkullIcon } from 'lucide-react'
 import { useState } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import type { Entries } from 'type-fest'
@@ -12,6 +13,7 @@ import { capitalize } from '~/lib/utils'
 import type { CharacterStats } from '~/schemas/character-stats'
 
 import { AlertModal } from './alert-modal'
+import { Modal } from './modal'
 import { Button } from './ui/button'
 import {
   Card,
@@ -26,6 +28,7 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Progress } from './ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
+import { Textarea } from './ui/textarea'
 
 const statEmojis = {
   charisma: '✨',
@@ -40,9 +43,10 @@ export function CharacterCreation() {
     useCharacterInfo()
   const { characterStats, resetCharacterStats, zeroCharacterStats } =
     useCharacterStats()
-  const { updateGame } = useGame()
+  const { updateGame, importGameSave } = useGame()
   const [activeTab, setActiveTab] = useState('basic-info')
-
+  const [isImportSaveModalOpen, setIsImportSaveModalOpen] = useState(false)
+  const [importGameSaveCode, setImportGameSaveCode] = useState('')
   const characterStatsEntries = Object.entries(
     characterStats
   ) as Entries<CharacterStats>
@@ -112,7 +116,8 @@ export function CharacterCreation() {
                     resetCharacterInfo()
                   }}
                 >
-                  🎲 Reroll Info
+                  <DicesIcon aria-hidden='true' className='size-4' /> Reroll
+                  Info
                 </Button>
               </div>
             </TabsContent>
@@ -161,14 +166,16 @@ export function CharacterCreation() {
                     resetCharacterStats()
                   }}
                 >
-                  🎲 Reroll Stat Points
+                  <DicesIcon aria-hidden='true' className='size-4' /> Reroll
+                  Stat Points
                 </Button>
 
                 <AlertModal
                   description='This action cannot be undone. Continuing will set your stats to 0.'
                   trigger={
                     <Button className='flex flex-1' variant='destructive'>
-                      💀 Hard Mode
+                      <SkullIcon aria-hidden='true' className='size-4' /> Hard
+                      Mode
                     </Button>
                   }
                   onConfirm={() => {
@@ -179,9 +186,18 @@ export function CharacterCreation() {
             </TabsContent>
           </Tabs>
         </CardContent>
-        <CardFooter className='flex gap-4'>
+        <CardFooter className='flex w-full flex-col gap-2'>
           <Button
-            className='flex flex-1'
+            className='flex w-full flex-1'
+            variant='secondary'
+            onClick={() => {
+              setIsImportSaveModalOpen(true)
+            }}
+          >
+            <DownloadIcon aria-hidden='true' className='size-4' /> Import Save
+          </Button>
+          <Button
+            className='flex w-full flex-1'
             onClick={() => {
               updateGame('started', true)
             }}
@@ -190,6 +206,31 @@ export function CharacterCreation() {
           </Button>
         </CardFooter>
       </Card>
+
+      <Modal
+        open={isImportSaveModalOpen}
+        setOpen={setIsImportSaveModalOpen}
+        title='Game Save Import'
+        content={
+          <div className='flex w-full flex-col gap-2'>
+            <Textarea
+              className='min-h-32 break-all'
+              defaultValue={importGameSaveCode}
+              onChange={(e) => {
+                setImportGameSaveCode(e.currentTarget.value)
+              }}
+            />
+            <Button
+              onClick={() => {
+                importGameSave(importGameSaveCode)
+              }}
+            >
+              <DownloadIcon aria-hidden='true' className='size-4' />
+              Import Save
+            </Button>
+          </div>
+        }
+      />
     </div>
   )
 }
