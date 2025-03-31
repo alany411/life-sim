@@ -1,6 +1,7 @@
 import { useLocalStorage } from 'usehooks-ts'
 
 import { randomDate, randomInt, randomName } from '~/lib/utils'
+import type { CharacterInfo } from '~/schemas/character-info'
 
 export function useCharacterInfo() {
   const [characterInfo, setCharacterInfo] = useLocalStorage<CharacterInfo>(
@@ -37,6 +38,7 @@ export function useCharacterInfo() {
 
   return {
     characterInfo,
+    setCharacterInfo,
     resetCharacterInfo,
     updateCharacterInfo,
   }

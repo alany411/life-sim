@@ -17,6 +17,7 @@ import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useCharacterStatus } from '~/hooks/use-character-status'
 import { useGame } from '~/hooks/use-game'
 import { cn, formatCurrency } from '~/lib/utils'
+import type { CharacterStats } from '~/schemas/character-stats'
 
 import { AlertModal } from './alert-modal'
 import { Modal } from './modal'

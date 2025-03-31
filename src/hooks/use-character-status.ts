@@ -1,6 +1,7 @@
 import { useLocalStorage } from 'usehooks-ts'
 
 import { randomInt } from '~/lib/utils'
+import type { CharacterStatus } from '~/schemas/character-status'
 
 export function useCharacterStatus() {
   const [characterStatus, setCharacterStatus] =
@@ -25,6 +26,7 @@ export function useCharacterStatus() {
 
   return {
     characterStatus,
+    setCharacterStatus,
     resetCharacterStatus,
     updateCharacterStatus,
   }

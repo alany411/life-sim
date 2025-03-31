@@ -1,6 +1,7 @@
 import { useLocalStorage } from 'usehooks-ts'
 
 import { randomInt } from '~/lib/utils'
+import type { CharacterStats } from '~/schemas/character-stats'
 
 export function useCharacterStats() {
   const [characterStats, setCharacterStats] = useLocalStorage<CharacterStats>(
@@ -43,6 +44,7 @@ export function useCharacterStats() {
 
   return {
     characterStats,
+    setCharacterStats,
     resetCharacterStats,
     zeroCharacterStats,
     updateCharacterStats,

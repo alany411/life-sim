@@ -1,5 +1,7 @@
 import { useLocalStorage } from 'usehooks-ts'
 
+import type { Game } from '~/schemas/game'
+
 export function useGame() {
   const [game, setGame] = useLocalStorage<Game>('game', {
     initialized: false,
@@ -12,6 +14,7 @@ export function useGame() {
 
   return {
     game,
+    setGame,
     updateGame,
   }
 }

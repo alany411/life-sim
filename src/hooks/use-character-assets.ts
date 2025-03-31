@@ -1,5 +1,11 @@
 import { useLocalStorage } from 'usehooks-ts'
 
+import type {
+  CharacterAsset,
+  CharacterAssets,
+} from '~/schemas/character-assets'
+import type { CharacterAssetType } from '~/schemas/character-assets'
+
 export function useCharacterAssets() {
   const [characterAssets, setCharacterAssets] =
     useLocalStorage<CharacterAssets>('character-assets', {
@@ -48,6 +54,7 @@ export function useCharacterAssets() {
 
   return {
     characterAssets,
+    setCharacterAssets,
     resetCharacterAssets,
     addCharacterAsset,
     removeCharacterAsset,

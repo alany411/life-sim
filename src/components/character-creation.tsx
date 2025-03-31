@@ -9,6 +9,7 @@ import { useCharacterInfo } from '~/hooks/use-character-info'
 import { useCharacterStats } from '~/hooks/use-character-stats'
 import { useGame } from '~/hooks/use-game'
 import { capitalize } from '~/lib/utils'
+import type { CharacterStats } from '~/schemas/character-stats'
 
 import { AlertModal } from './alert-modal'
 import { Button } from './ui/button'
