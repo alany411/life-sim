@@ -1,3 +1,5 @@
+import type { SuperJSONResult } from 'superjson'
+import superjson from 'superjson'
 import { useLocalStorage } from 'usehooks-ts'
 
 import type { Game } from '~/schemas/game'
@@ -31,15 +33,19 @@ export function useGame() {
         characterStatus,
       })
 
-      return btoa(JSON.stringify(saveData))
+      const { json, meta } = superjson.serialize(saveData)
+      return btoa(JSON.stringify({ json, meta }))
     } catch (_error) {
-      return null
+      return 'There was an error with your game save.'
     }
   }
 
-  const loadGameSave = (gameSave: string) => {
+  const importGameSave = (gameSave: string) => {
     try {
-      const saveData = gameSaveSchema.parse(JSON.parse(atob(gameSave)))
+      const { json, meta } = JSON.parse(atob(gameSave)) as SuperJSONResult
+      const saveData = gameSaveSchema.parse(
+        superjson.deserialize({ json, meta })
+      )
 
       setCharacterAssets(saveData.characterAssets)
       setCharacterInfo(saveData.characterInfo)
@@ -49,8 +55,10 @@ export function useGame() {
         initialized: true,
         started: true,
       })
+
+      return true
     } catch (_error) {
-      return null
+      return false
     }
   }
 
@@ -59,6 +67,6 @@ export function useGame() {
     setGame,
     updateGame,
     exportGameSave,
-    loadGameSave,
+    importGameSave,
   }
 }
