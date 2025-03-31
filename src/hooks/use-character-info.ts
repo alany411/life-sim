@@ -1,12 +1,9 @@
-import type { SuperJSONResult } from 'superjson'
-import superjson from 'superjson'
-import { useLocalStorage } from 'usehooks-ts'
-
+import { useStorage } from '~/hooks/use-storage'
 import { randomDate, randomInt, randomName } from '~/lib/utils'
 import type { CharacterInfo } from '~/schemas/character-info'
 
 export function useCharacterInfo() {
-  const [characterInfo, setCharacterInfo] = useLocalStorage<CharacterInfo>(
+  const [characterInfo, setCharacterInfo] = useStorage<CharacterInfo>(
     'character-info',
     {
       avatar: '',
@@ -16,16 +13,6 @@ export function useCharacterInfo() {
       gender: '',
       profession: '',
       money: 0,
-    },
-    {
-      deserializer: (value) => {
-        const { json, meta } = JSON.parse(value) as SuperJSONResult
-        return superjson.deserialize({ json, meta })
-      },
-      serializer: (value) => {
-        const { json, meta } = superjson.serialize(value)
-        return JSON.stringify({ json, meta })
-      },
     }
   )
 

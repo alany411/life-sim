@@ -1,14 +1,16 @@
-import { useLocalStorage } from 'usehooks-ts'
-
 import { randomInt } from '~/lib/utils'
 import type { CharacterStatus } from '~/schemas/character-status'
 
+import { useStorage } from './use-storage'
+
 export function useCharacterStatus() {
-  const [characterStatus, setCharacterStatus] =
-    useLocalStorage<CharacterStatus>('character-status', {
+  const [characterStatus, setCharacterStatus] = useStorage<CharacterStatus>(
+    'character-status',
+    {
       happiness: 0,
       health: 0,
-    })
+    }
+  )
 
   const resetCharacterStatus = () => {
     setCharacterStatus({
