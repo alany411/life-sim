@@ -12,6 +12,7 @@ import {
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
+import { toast } from 'sonner'
 import type { Entries } from 'type-fest'
 
 import { useCharacterInfo } from '~/hooks/use-character-info'
@@ -236,6 +237,7 @@ export function Dashboard() {
                     <Button
                       onClick={() => {
                         void navigator.clipboard.writeText(exportGameSave())
+                        toast.success('Game save code copied to clipboard.')
                       }}
                     >
                       <CopyIcon aria-hidden='true' className='size-4' /> Copy to

@@ -1,3 +1,4 @@
+import { toast } from 'sonner'
 import type { SuperJSONResult } from 'superjson'
 import superjson from 'superjson'
 import { useLocalStorage } from 'usehooks-ts'
@@ -36,7 +37,8 @@ export function useGame() {
       const { json, meta } = superjson.serialize(saveData)
       return btoa(JSON.stringify({ json, meta }))
     } catch (_error) {
-      return 'There was an error with your game save.'
+      toast.error('There was an error generating your game save export code.')
+      return ''
     }
   }
 
@@ -56,9 +58,9 @@ export function useGame() {
         started: true,
       })
 
-      return true
+      toast.success('Game save imported successfully.')
     } catch (_error) {
-      return false
+      toast.error('There was an error importing your game save.')
     }
   }
 
