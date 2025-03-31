@@ -1,7 +1,13 @@
 'use client'
 
 import { format } from 'date-fns'
-import { LucideSettings as LucideSettingsIcon } from 'lucide-react'
+import {
+  LucideSettings as LucideSettingsIcon,
+  MonitorIcon,
+  MoonIcon,
+  SunIcon,
+} from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { RandomAvatar } from 'react-random-avatar'
 import type { Entries } from 'type-fest'
@@ -17,6 +23,7 @@ import { Modal } from './modal'
 import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
 import { Progress } from './ui/progress'
+import { Separator } from './ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
 export function Dashboard() {
@@ -24,6 +31,7 @@ export function Dashboard() {
   const { characterStats } = useCharacterStats()
   const { characterStatus } = useCharacterStatus()
   const { updateGame } = useGame()
+  const { theme, setTheme } = useTheme()
   const [activeTab, setActiveTab] = useState('1')
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
 
@@ -48,7 +56,8 @@ export function Dashboard() {
               setIsSettingsModalOpen(true)
             }}
           >
-            <LucideSettingsIcon className='size-6' />
+            <LucideSettingsIcon aria-hidden='true' className='size-6' />{' '}
+            <span className='sr-only'>Settings</span>
           </Button>
         </div>
       </div>
@@ -173,17 +182,39 @@ export function Dashboard() {
         setOpen={setIsSettingsModalOpen}
         title='Settings'
         content={
-          <AlertModal
-            description='This action cannot be undone. Continuing will end this current life so you can start a new one.'
-            trigger={
-              <Button className='w-full' variant='destructive'>
-                Reset Life
-              </Button>
-            }
-            onConfirm={() => {
-              updateGame('started', false)
-            }}
-          />
+          <div className='flex w-full flex-col gap-4'>
+            <div className='flex flex-col gap-2'>
+              <div className='text-sm font-medium'>Theme</div>
+              <Tabs value={theme} onValueChange={setTheme}>
+                <TabsList className='grid w-full grid-cols-3'>
+                  <TabsTrigger value='system'>
+                    <MonitorIcon aria-hidden='true' className='size-4' />{' '}
+                    <span className='sr-only sm:not-sr-only'>System</span>
+                  </TabsTrigger>
+                  <TabsTrigger value='light'>
+                    <SunIcon aria-hidden='true' className='size-4' />{' '}
+                    <span className='sr-only sm:not-sr-only'>Light</span>
+                  </TabsTrigger>
+                  <TabsTrigger value='dark'>
+                    <MoonIcon aria-hidden='true' className='size-4' />{' '}
+                    <span className='sr-only sm:not-sr-only'>Dark</span>
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            <Separator />
+            <AlertModal
+              description='This action cannot be undone. Continuing will end this current life so you can start a new one.'
+              trigger={
+                <Button className='w-full' variant='destructive'>
+                  Reset Life
+                </Button>
+              }
+              onConfirm={() => {
+                updateGame('started', false)
+              }}
+            />
+          </div>
         }
       />
     </div>
