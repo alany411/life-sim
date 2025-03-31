@@ -10,15 +10,22 @@ const characterAssetSchema = z.object({
   health: z.number().min(0),
 })
 
-const characterAssetsSchema = z.record(
-  characterAssetTypeSchema,
-  z.array(characterAssetSchema)
+const characterAssetsSchema = z.object(
+  Object.fromEntries(
+    characterAssetTypeSchema.options.map((type) => [
+      type,
+      z.array(characterAssetSchema).default([]),
+    ])
+  ) as Record<
+    CharacterAssetType,
+    z.ZodDefault<z.ZodArray<typeof characterAssetSchema>>
+  >
 )
 
 export { characterAssetSchema, characterAssetsSchema, characterAssetTypeSchema }
 
 type CharacterAssetType = z.infer<typeof characterAssetTypeSchema>
 type CharacterAsset = z.infer<typeof characterAssetSchema>
-type CharacterAssets = Required<z.infer<typeof characterAssetsSchema>>
+type CharacterAssets = z.infer<typeof characterAssetsSchema>
 
 export type { CharacterAsset, CharacterAssets, CharacterAssetType }
