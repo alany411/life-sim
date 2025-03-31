@@ -26,8 +26,21 @@ import { AlertModal } from './alert-modal'
 import { Modal } from './modal'
 import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
 import { Progress } from './ui/progress'
-import { Separator } from './ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import { Textarea } from './ui/textarea'
 
@@ -39,7 +52,7 @@ export function Dashboard() {
   const { theme, setTheme } = useTheme()
   const [activeDashboardTab, setActiveDashboardTab] = useState('1')
   const [activeGameSaveTab, setActiveGameSaveTab] = useState('export')
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
+  const [isGameSaveModalOpen, setIsGameSaveModalOpen] = useState(false)
   const [importGameSaveCode, setImportGameSaveCode] = useState('')
 
   const characterStatsEntries = Object.entries(
@@ -56,16 +69,81 @@ export function Dashboard() {
       <div className='bg-sidebar text-sidebar-foreground border-sidebar-border flex w-full border-b'>
         <div className='mx-auto flex w-full max-w-6xl flex-1 items-center justify-between p-4 text-3xl leading-none font-semibold'>
           <div>LifeSim</div>
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={() => {
-              setIsSettingsModalOpen(true)
-            }}
-          >
-            <LucideSettingsIcon aria-hidden='true' className='size-6' />{' '}
-            <span className='sr-only'>Settings</span>
-          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild={true}>
+              <Button size='icon' variant='ghost'>
+                <LucideSettingsIcon aria-hidden='true' className='size-6' />{' '}
+                <span className='sr-only'>Settings</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Settings</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuRadioGroup
+                      value={theme}
+                      onValueChange={setTheme}
+                    >
+                      <DropdownMenuRadioItem
+                        value='system'
+                        onSelect={(e) => {
+                          e.preventDefault()
+                        }}
+                      >
+                        <MonitorIcon aria-hidden='true' className='size-4' />{' '}
+                        System
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem
+                        value='light'
+                        onSelect={(e) => {
+                          e.preventDefault()
+                        }}
+                      >
+                        <SunIcon aria-hidden='true' className='size-4' /> Light
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem
+                        value='dark'
+                        onSelect={(e) => {
+                          e.preventDefault()
+                        }}
+                      >
+                        <MoonIcon aria-hidden='true' className='size-4' /> Dark
+                      </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault()
+                  setIsGameSaveModalOpen(true)
+                }}
+              >
+                Game Save
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <AlertModal
+                description='This action cannot be undone. Continuing will end this current life so you can start a new one.'
+                trigger={
+                  <DropdownMenuItem
+                    variant='destructive'
+                    onSelect={(e) => {
+                      e.preventDefault()
+                    }}
+                  >
+                    Reset Life
+                  </DropdownMenuItem>
+                }
+                onConfirm={() => {
+                  updateGame('started', false)
+                }}
+              />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <div className='mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 p-4'>
@@ -189,95 +267,61 @@ export function Dashboard() {
       </div>
 
       <Modal
-        open={isSettingsModalOpen}
-        setOpen={setIsSettingsModalOpen}
-        title='Settings'
+        open={isGameSaveModalOpen}
+        setOpen={setIsGameSaveModalOpen}
+        title='Game Save'
         content={
-          <div className='flex w-full flex-col gap-4'>
-            <div className='flex flex-col gap-2'>
-              <div className='text-sm font-medium'>Theme</div>
-              <Tabs value={theme} onValueChange={setTheme}>
-                <TabsList className='grid w-full grid-cols-3'>
-                  <TabsTrigger value='system'>
-                    <MonitorIcon aria-hidden='true' className='size-4' />{' '}
-                    <span className='sr-only sm:not-sr-only'>System</span>
-                  </TabsTrigger>
-                  <TabsTrigger value='light'>
-                    <SunIcon aria-hidden='true' className='size-4' />{' '}
-                    <span className='sr-only sm:not-sr-only'>Light</span>
-                  </TabsTrigger>
-                  <TabsTrigger value='dark'>
-                    <MoonIcon aria-hidden='true' className='size-4' />{' '}
-                    <span className='sr-only sm:not-sr-only'>Dark</span>
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-            <div className='flex flex-col gap-2'>
-              <div className='text-sm font-medium'>Game Save</div>
-              <Tabs
-                defaultValue='export'
-                value={activeGameSaveTab}
-                onValueChange={setActiveGameSaveTab}
-              >
-                <TabsList className='grid w-full grid-cols-2'>
-                  <TabsTrigger value='export'>Export</TabsTrigger>
-                  <TabsTrigger value='import'>Import</TabsTrigger>
-                </TabsList>
-                <TabsContent value='export'>
-                  <div className='flex flex-col gap-2'>
-                    <Textarea
-                      className='min-h-32 break-all'
-                      defaultValue={exportGameSave()}
-                      readOnly={true}
-                      onClick={(e) => {
-                        e.currentTarget.select()
-                      }}
-                    />
-                    <Button
-                      onClick={() => {
-                        void navigator.clipboard.writeText(exportGameSave())
-                        toast.success('Game save code copied to clipboard.')
-                      }}
-                    >
-                      <CopyIcon aria-hidden='true' className='size-4' /> Copy to
-                      Clipboard
-                    </Button>
-                  </div>
-                </TabsContent>
-                <TabsContent value='import'>
-                  <div className='flex flex-col gap-2'>
-                    <Textarea
-                      className='min-h-32 break-all'
-                      defaultValue={importGameSaveCode}
-                      onChange={(e) => {
-                        setImportGameSaveCode(e.currentTarget.value)
-                      }}
-                    />
-                    <Button
-                      onClick={() => {
-                        importGameSave(importGameSaveCode)
-                      }}
-                    >
-                      <DownloadIcon aria-hidden='true' className='size-4' />
-                      Import Save
-                    </Button>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-            <Separator />
-            <AlertModal
-              description='This action cannot be undone. Continuing will end this current life so you can start a new one.'
-              trigger={
-                <Button className='w-full' variant='destructive'>
-                  Reset Life
-                </Button>
-              }
-              onConfirm={() => {
-                updateGame('started', false)
-              }}
-            />
+          <div className='flex w-full flex-col'>
+            <Tabs
+              defaultValue='export'
+              value={activeGameSaveTab}
+              onValueChange={setActiveGameSaveTab}
+            >
+              <TabsList className='grid w-full grid-cols-2'>
+                <TabsTrigger value='export'>Export</TabsTrigger>
+                <TabsTrigger value='import'>Import</TabsTrigger>
+              </TabsList>
+              <TabsContent value='export'>
+                <div className='flex flex-col gap-2'>
+                  <Textarea
+                    className='min-h-32 break-all'
+                    defaultValue={exportGameSave()}
+                    readOnly={true}
+                    onClick={(e) => {
+                      e.currentTarget.select()
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      void navigator.clipboard.writeText(exportGameSave())
+                      toast.success('Game save code copied to clipboard.')
+                    }}
+                  >
+                    <CopyIcon aria-hidden='true' className='size-4' /> Copy to
+                    Clipboard
+                  </Button>
+                </div>
+              </TabsContent>
+              <TabsContent value='import'>
+                <div className='flex flex-col gap-2'>
+                  <Textarea
+                    className='min-h-32 break-all'
+                    defaultValue={importGameSaveCode}
+                    onChange={(e) => {
+                      setImportGameSaveCode(e.currentTarget.value)
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      importGameSave(importGameSaveCode)
+                    }}
+                  >
+                    <DownloadIcon aria-hidden='true' className='size-4' />
+                    Import Save
+                  </Button>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         }
       />
