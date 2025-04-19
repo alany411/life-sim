@@ -50,7 +50,7 @@ export function Dashboard() {
   const { characterStatus } = useCharacterStatus()
   const { updateGame, exportGameSave, importGameSave } = useGame()
   const { theme, setTheme } = useTheme()
-  const [activeDashboardTab, setActiveDashboardTab] = useState('1')
+  const [activeDashboardTab, setActiveDashboardTab] = useState('events')
   const [activeGameSaveTab, setActiveGameSaveTab] = useState('export')
   const [isGameSaveModalOpen, setIsGameSaveModalOpen] = useState(false)
   const [importGameSaveCode, setImportGameSaveCode] = useState('')
@@ -248,17 +248,29 @@ export function Dashboard() {
           value={activeDashboardTab}
           onValueChange={setActiveDashboardTab}
         >
-          <TabsList className='grid w-full grid-cols-5'>
-            <TabsTrigger value='1'>Some Tab 1</TabsTrigger>
-            <TabsTrigger value='2'>Some Tab 2</TabsTrigger>
-            <TabsTrigger value='3'>Some Tab 3</TabsTrigger>
-            <TabsTrigger value='4'>Some Tab 4</TabsTrigger>
-            <TabsTrigger value='5'>Some Tab 5</TabsTrigger>
+          <TabsList className='grid w-full grid-cols-3'>
+            <TabsTrigger value='events'>Events</TabsTrigger>
+            <TabsTrigger value='relationships'>Relationships</TabsTrigger>
+            <TabsTrigger value='assets'>Assets</TabsTrigger>
 
-            <TabsContent className='col-span-5 mt-5' value='1'>
+            <TabsContent className='col-span-3 mt-5' value='events'>
               <Card>
                 <CardContent>
-                  <div>Tab 1</div>
+                  <div>Events</div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent className='col-span-3 mt-5' value='relationships'>
+              <Card>
+                <CardContent>
+                  <div>Relationships</div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent className='col-span-3 mt-5' value='assets'>
+              <Card>
+                <CardContent>
+                  <div>Assets</div>
                 </CardContent>
               </Card>
             </TabsContent>
