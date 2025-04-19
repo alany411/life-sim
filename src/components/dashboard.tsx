@@ -212,7 +212,7 @@ export function Dashboard() {
                 </div>
                 <div className='flex flex-col gap-1'>
                   <div className='flex items-center justify-between'>
-                    <div className='text-sm font-medium'>Happiness</div>
+                    <div className='text-sm font-medium'>🙂 Happiness</div>
                     <div className='text-muted-foreground text-sm tabular-nums'>
                       {characterStatus.happiness}%
                     </div>
@@ -227,7 +227,7 @@ export function Dashboard() {
 
                 <div className='flex flex-col gap-1'>
                   <div className='flex items-center justify-between'>
-                    <div className='text-sm font-medium'>Health</div>
+                    <div className='text-sm font-medium'>❤️ Health</div>
                     <div className='text-muted-foreground text-sm tabular-nums'>
                       {characterStatus.health}%
                     </div>
